@@ -1,0 +1,25 @@
+改数据后遇到的问题及解决：
+
+1. 大分子B SMILES 解析失败
+   原因：芳香环无法 kekulize
+   解决：换成长碳链 SMILES
+
+2. classification_report 报 ValueError
+   原因：测试集只有 1 个类别
+   解决：加 labels=[0, 1] 和 zero_division=0
+
+3. 混淆矩阵报 IndexError
+   原因：测试集只有 1 个类别，矩阵是 1×1 不是 2×2
+   解决：confusion_matrix 里加 labels=[0, 1]
+
+4. 特征重要性全是 0
+   原因：改了数据没重新 model.fit()
+   解决：从头跑完整流程
+
+5. 图不显示
+   原因：同上，model 没训练
+   解决：同上
+
+根因：
+- 不合格样本太少 → 多加不合格分子 + stratify=y
+- 改了数据没重跑训练 → 每次改数据从头跑所有 cell
