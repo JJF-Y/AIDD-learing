@@ -16,7 +16,6 @@ from rdkit.Chem import Descriptors
 
 import pubchempy as pcp
 
-from sklearn.model_selection import cross_val_score
 
 #数据
 drug_names = [
@@ -40,8 +39,6 @@ drug_names = [
 features = []
 lables = []
 names = []
-drug_smiles = []
-smiles = []
 
 #不对，没有smile式，先获取
 compounds = []
@@ -76,11 +73,11 @@ y = np.array(lables)
 print(X)
 
 for i,name in enumerate(names):
-    print(f"{name:15} MW = {X[i][0]:6.4f} LOGP = {X[i][1]:5.4f}"
+    print(f"{name:15} MW = {X[i][0]:6.4f} LOGP = {X[i][1]:5.4f} "
            f"HBA = {X[i][2]:5.4f} HBD = {X[i][3]:4.4f} {'合格'if y[i] ==1 else '不合格'}")
 
 X_train,X_test,y_train,y_test = train_test_split(
-    X,y,test_size = 0.3,random_state=111
+    X,y,test_size = 0.3,random_state=111,stratify=y
 )
 model = RandomForestClassifier(random_state=111,n_estimators=150)
 model.fit(X_train,y_train)
