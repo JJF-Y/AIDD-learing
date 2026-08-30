@@ -45,4 +45,5 @@ for smiles, name in drug_names.items:
         continue
     mw = Descriptors.MolWt(mol)
     logp = Descriptors.MolLogP(mol)
-    
+    hba = Descriptors.NumHAcceptors(mol)
+    hbd = Descriptors.NumHDonors(mol)
