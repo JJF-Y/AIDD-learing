@@ -52,7 +52,7 @@ drug_smiles = dict(zip(drug_names,smiles))
 
 #先拆包，把数据拿出来,循环的话是一个一个进行的
 for name,smiles in drug_smiles.items():
-    mol = Chem.MolFromSmiles(smile) #转成分子对象
+    mol = Chem.MolFromSmiles(smiles) #转成分子对象
     if mol is None:
         print("失败")
         continue
@@ -75,4 +75,4 @@ print(X)
 
 for i,name in enumerate(names):
     print(f"{name:15} MW = {X[i][0]:6.4f} LOGP = {X[i][1]:5.4f}"
-          f"HBA = {X[i][2]:5.4f} HBD = {X[i][3]:4.4f} {'合格'if y[i] ==1 else '不合格'}")
+           f"HBA = {X[i][2]:5.4f} HBD = {X[i][3]:4.4f} {'合格'if y[i] ==1 else '不合格'}")
