@@ -14,6 +14,8 @@ from sklearn.metrics import (accuracy_score, classification_report,
 from rdkit import Chem
 from rdkit.Chem import Descriptors
 
+import pubchempy as pcp
+
 #数据
 drug_names = [
     'aspirin',        # 阿司匹林
@@ -32,16 +34,26 @@ drug_names = [
     'erythromycin',   # 红霉素（大分子，大环内酯）
     'digoxin',        # 地高辛（大分子，强心苷）
 ]
-
-#不对，没有smile式，先获取
 #创建三个空列表，先处理数据
 features = []
 lables = []
 names = []
+drug_smiles = []
+smiles = []
+
+#不对，没有smile式，先获取
+compounds = []
+for name in drug_names:
+    c = pcp.get_compounds(name, 'name')
+    if c:
+       smile = c[0].connectivity_smiles
+       smiles.append(smile)
+drug_smiles = dict(zip(drug_names,smiles))
+
 
 #先拆包，把数据拿出来,循环的话是一个一个进行的
-for smiles, name in drug_smiles.items():
-    mol = Chem.MolFromSmiles(smiles) #转成分子对象
+for name,smiles in drug_smiles.items():
+    mol = Chem.MolFromSmiles(smile) #转成分子对象
     if mol is None:
         print("失败")
         continue
@@ -57,4 +69,4 @@ for smiles, name in drug_smiles.items():
     if hba  > 10 : violation += 1
     if hbd >  5 : violation += 1
     lables.append(1 if violation <= 1 else 0)
-print(features)
+
