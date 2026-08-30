@@ -32,13 +32,15 @@ drug_names = [
     'erythromycin',   # 红霉素（大分子，大环内酯）
     'digoxin',        # 地高辛（大分子，强心苷）
 ]
+
+#不对，没有smile式，先获取
 #创建三个空列表，先处理数据
 features = []
 lables = []
 names = []
 
 #先拆包，把数据拿出来,循环的话是一个一个进行的
-for smiles, name in drug_names.items:
+for smiles, name in drug_smiles.items():
     mol = Chem.MolFromSmiles(smiles) #转成分子对象
     if mol is None:
         print("失败")
@@ -47,3 +49,12 @@ for smiles, name in drug_names.items:
     logp = Descriptors.MolLogP(mol)
     hba = Descriptors.NumHAcceptors(mol)
     hbd = Descriptors.NumHDonors(mol)
+    features .append([mw,logp,hba,hbd])
+    names.append(name)
+    violation = 0
+    if mw > 500 : violation += 1
+    if logp >  5 : violation += 1
+    if hba  > 10 : violation += 1
+    if hbd >  5 : violation += 1
+    lables.append(1 if violation <= 1 else 0)
+print(features)
