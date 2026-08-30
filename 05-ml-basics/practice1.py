@@ -1,6 +1,19 @@
 #扩展药物数据
 # 目标从头写计算特征、训练模型、输出准确率
 
+#导入模块
+import numpy as np  #数据处理
+import pandas as pd
+import matplotlib.pyplot as plt
+
+from sklearn.model_selection import train_test_split, cross_val_score
+from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
+from sklearn.metrics import (accuracy_score, classification_report,
+                             confusion_matrix, mean_squared_error, r2_score)
+
+from rdkit import Chem
+from rdkit.Chem import Descriptors
+
 #数据
 drug_names = [
     'aspirin',        # 阿司匹林
