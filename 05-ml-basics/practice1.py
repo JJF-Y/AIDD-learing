@@ -36,3 +36,13 @@ drug_names = [
 features = []
 lables = []
 names = []
+
+#先拆包，把数据拿出来,循环的话是一个一个进行的
+for smiles, name in drug_names.items:
+    mol = Chem.MolFromSmiles(smiles) #转成分子对象
+    if mol is None:
+        print("失败")
+        continue
+    mw = Descriptors.MolWt(mol)
+    logp = Descriptors.MolLogP(mol)
+    
