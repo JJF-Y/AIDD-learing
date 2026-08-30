@@ -32,3 +32,7 @@ drug_names = [
     'erythromycin',   # 红霉素（大分子，大环内酯）
     'digoxin',        # 地高辛（大分子，强心苷）
 ]
+#创建三个空列表，先处理数据
+features = []
+lables = []
+names = []
