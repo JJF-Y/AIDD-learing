@@ -16,6 +16,8 @@ from rdkit.Chem import Descriptors
 
 import pubchempy as pcp
 
+from sklearn.model_selection import cross_val_score
+
 #数据
 drug_names = [
     'aspirin',        # 阿司匹林
@@ -84,3 +86,9 @@ model = RandomForestClassifier(random_state=111,n_estimators=150)
 model.fit(X_train,y_train)
 y_pred = model.predict(X_test)
 print('测试集准确率:', accuracy_score(y_test, y_pred))
+
+#交叉验证
+scores  = cross_val_score(model,X,y,cv = 5)
+print('5次交叉验证准确率:', scores)
+print('平均准确率:', scores.mean())
+print('标准差:', scores.std())
