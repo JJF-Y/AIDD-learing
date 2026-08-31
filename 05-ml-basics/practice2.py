@@ -1,3 +1,4 @@
+#用别的模型去训练并预测
 #导入模块
 import numpy as np  
 import pandas as pd
@@ -48,5 +49,11 @@ for name in items:
         smile = c[0].connectivity_smiles
         smiles.append(smile)
 
+drug_smiles = dict(zip(names,smiles))
 
+for name , smile in drug_smiles.items():
+    mol = Chem.MolFromSmiles(smile)
+    if mol == None:
+        print('失败')
+        continue
 
