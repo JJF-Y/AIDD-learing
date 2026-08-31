@@ -56,4 +56,8 @@ for name , smile in drug_smiles.items():
     if mol == None:
         print('失败')
         continue
-
+    mw  = Descriptors.MolWt(mol)
+    logP = Descriptors.MolLogP(mol)
+    hba  = Descriptors.NumHAcceptors(mol)
+    hbd = Descriptors.NumHDonors(mol)
+    
