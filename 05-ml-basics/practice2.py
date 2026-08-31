@@ -39,7 +39,7 @@ items = [
 compounds = []
 smiles = []
 names = []
-
+drug_smiles = []
 
 for name in items:
     c = pcp.get_compounds(name,'name')
