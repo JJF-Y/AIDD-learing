@@ -36,4 +36,17 @@ items = [
     'paclitaxel',      # 紫杉醇（抗肿瘤，大分子）
 ]
 
+compounds = []
+smiles = []
+names = []
+
+
+for name in items:
+    c = pcp.get_compounds(name,'name')
+    names.append(name)
+    if c:
+        smile = c[0].connectivity_smiles
+        smiles.append(smile)
+
+
 
