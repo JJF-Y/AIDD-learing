@@ -125,3 +125,9 @@ cv1 = cross_val_score(model1, X, y, cv=5)
 cv2 = cross_val_score(model2, X, y, cv=5)
 print(f'逻辑回归: {cv1.mean():.2f} ± {cv1.std():.2f}')
 print(f'随机森林: {cv2.mean():.2f} ± {cv2.std():.2f}')
+
+#准确率: 1.00
+#准确率: 1.00
+#逻辑回归: 0.96 ± 0.05
+#随机森林: 0.98 ± 0.04
+#就结果来看，随机森林稳定些，但是数据太小，差距太小，可能是正常波动
