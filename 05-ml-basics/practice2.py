@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 
 from sklearn.model_selection import train_test_split, cross_val_score
 from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
+from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import (accuracy_score, classification_report,
                              confusion_matrix, mean_squared_error, r2_score)
 
@@ -63,3 +64,10 @@ for name , smile in drug_smiles.items():
     hbd = Descriptors.NumHDonors(mol)
     features.append([mw, logP, hba, hbd])
     names.append(name)
+X = np.array(features)
+y = np.array(names)
+
+x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42,stratify=y)
+
+model = LogisticRegression(n_estimators=200, random_state=42)
+model.fit(x_train, y_train)
