@@ -62,18 +62,18 @@ items = [
 names = []
 smiles = []
 
-for name in items:
-    for attempt in range(3):
-        try:
+for name in items:  #遍历
+    for attempt in range(3):    #每个最多尝试3次
+        try:    #尝试，避免因为出错导致后续代码无法进行，所以可以把可能出错的代码放在try里面，相当于隔离，出错了就跳到expect里面去处理,这两个是配对的
             c = pcp.get_compounds(name, 'name')
             if c:
                 smiles.append(c[0].connectivity_smiles)
                 names.append(name)
-            break
-        except Exception:
+            break   #如果成功了就打破循环，没成功就继续尝试
+        except Exception:   #看try情况，如果失败就转到这里，避免出错
             time.sleep(1)
-            continue
-    else:
+            continue    #处理完出错后返回，下一个
+    else:   #for... else，只有前面正常运行时，才会执行else，前面break了就不会执行
         print(f'{name} 查询失败，跳过')
     time.sleep(0.3)
 
