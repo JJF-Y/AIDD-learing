@@ -36,6 +36,36 @@ items = [
     'sirolimus',       # 西罗莫司（大分子）
     'doxorubicin',     # 多柔比星（抗肿瘤，偏大）
     'paclitaxel',      # 紫杉醇（抗肿瘤，大分子）
+    'codeine',            # 可待因
+    'morphine',           # 吗啡
+    'lidocaine',          # 利多卡因
+    'ranitidine',         # 雷尼替丁
+    'domperidone',        # 多潘立酮
+    'carbamazepine',      # 卡马西平
+    'phenytoin',          # 苯妥英
+    'chlorpromazine',     # 氯丙嗪
+    'haloperidol',        # 氟哌啶醇
+    'hydrochlorothiazide',# 氢氯噻嗪
+    'furosemide',         # 呋塞米
+    'spironolactone',     # 螺内酯
+    'glipizide',          # 格列吡嗪
+    'cimetidine',         # 西咪替丁
+    'allopurinol',        # 别嘌醇
+    'theophylline',       # 茶碱
+    'prednisolone',       # 泼尼松龙
+    'dexamethasone',      # 地塞米松
+    'hydrocortisone',     # 氢化可的松
+    'betamethasone',      # 倍他米松
+    'budesonide',         # 布地奈德
+    'terbutaline',        # 特布他林
+    'salbutamol',         # 沙丁胺醇
+    'mirtazapine',        # 米氮平
+    'venlafaxine',        # 文拉法辛
+    'bleomycin',          # 博来霉素（大分子）
+    'gentamicin',         # 庆大霉素（大分子）
+    'amikacin',           # 阿米卡星（大分子）
+    'streptomycin',       # 链霉素（大分子）
+    'neomycin',           # 新霉素（大分子）
 ]
 
 compounds = []
