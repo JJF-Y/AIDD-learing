@@ -81,7 +81,17 @@ y = np.array(labels)
 
 x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42,stratify=y)
 
-model = LogisticRegression(max_iter=200, random_state=42)
-model.fit(x_train, y_train)
-y_pred = model.predict(x_test) 
+model1 = LogisticRegression(max_iter=200, random_state=42)
+model1.fit(x_train, y_train)
+y_pred = model1.predict(x_test) 
 print(f'准确率: {accuracy_score(y_test, y_pred):.2f}')
+
+model2 = RandomForestClassifier(n_estimators=200, random_state=42)
+model2.fit(x_train, y_train)
+y_pred2 = model2.predict(x_test)
+print(f'准确率: {accuracy_score(y_test, y_pred2):.2f}')
+
+cv1 = cross_val_score(model1, X, y, cv=5)
+cv2 = cross_val_score(model2, X, y, cv=5)
+print(f'逻辑回归: {cv1.mean():.2f} ± {cv1.std():.2f}')
+print(f'随机森林: {cv2.mean():.2f} ± {cv2.std():.2f}')
