@@ -41,6 +41,7 @@ compounds = []
 smiles = []
 names = []
 drug_smiles = []
+features = []
 
 for name in items:
     c = pcp.get_compounds(name,'name')
@@ -60,4 +61,5 @@ for name , smile in drug_smiles.items():
     logP = Descriptors.MolLogP(mol)
     hba  = Descriptors.NumHAcceptors(mol)
     hbd = Descriptors.NumHDonors(mol)
-    
+    features.append([mw, logP, hba, hbd])
+    names.append(name)
