@@ -83,4 +83,5 @@ x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_
 
 model = LogisticRegression(max_iter=200, random_state=42)
 model.fit(x_train, y_train)
-print('1')
+y_pred = model.predict(x_test) 
+print(f'准确率: {accuracy_score(y_test, y_pred):.2f}')
