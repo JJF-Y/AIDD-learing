@@ -10,3 +10,46 @@ from sklearn.metrics import (accuracy_score, classification_report,
 
 from rdkit import Chem
 from rdkit.Chem import Descriptors
+
+items = [
+    # 心血管（1-20）
+    'enalapril',          'lisinopril',         'perindopril',
+    'telmisartan',        'valsartan',          'irbesartan',
+    'bisoprolol',         'carvedilol',         'atenolol',
+    'nadolol',            'pindolol',           'nifedipine',
+    'felodipine',         'nicardipine',        'nimodipine',
+    'verapamil',          'diltiazem',          'doxazosin',
+    'tamsulosin',         'terazosin',
+    # 抗菌（21-40）
+    'cephalexin',         'cefaclor',           'cefixime',
+    'sulfamethoxazole',   'trimethoprim',       'nitrofurantoin',
+    'metronidazole',      'tinidazole',         'chloramphenicol',
+    'clindamycin',        'tetracycline',       'doxycycline',
+    'minocycline',        'ciprofloxacin',      'norfloxacin',
+    'ofloxacin',          'moxifloxacin',
+    # 抗炎镇痛（41-48）
+    'indomethacin',       'sulindac',           'ketoprofen',
+    'flurbiprofen',       'piroxicam',          'meloxicam',
+    'celecoxib',          'etodolac',
+    # 镇痛中枢（49-68）
+    'nabumetone',         'ketorolac',          'tramadol',
+    'buprenorphine',      'methadone',          'naloxone',
+    'levodopa',           'carbidopa',          'amantadine',
+    'memantine',          'rivastigmine',       'donepezil',
+    'topiramate',         'lamotrigine',        'gabapentin',
+    'pregabalin',         'ethosuximide',       'primidone',
+    'levetiracetam',      'alprazolam',
+    # 精神消化内分泌（69-80）
+    'midazolam',          'zolpidem',           'zopiclone',
+    'buspirone',          'famotidine',         'nizatidine',
+    'misoprostol',        'metoclopramide',     'ondansetron',
+    'loperamide',         'pioglitazone',       'rosiglitazone',
+    # 大分子（81-100）
+    'tobramycin',         'kanamycin',          'amphotericin',
+    'capreomycin',        'bacitracin',         'teicoplanin',
+    'daptomycin',         'caspofungin',        'micafungin',
+    'anidulafungin',      'midecamycin',        'spiramycin',
+    'josamycin',          'roxithromycin',      'telithromycin',
+    'fidaxomicin',        'rifabutin',          'viomycin',
+    'nystatin',           'natamycin',
+]
