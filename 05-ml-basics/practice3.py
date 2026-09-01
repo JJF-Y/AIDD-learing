@@ -60,19 +60,25 @@ items = [
 ]
 
 names = []
-compounds = []
 smiles = []
-drug_smiles = []
 
-#先处理，转换
 for name in items:
-    c = pcp.get_compounds(name, 'name')
-    names.append(name)
-    if c:
-        smile = c[0].connectivity_smiles
-        smiles.append(smile)
-    time.sleep(0.3)  # 避免请求过快被封禁
-print(names)
+    for attempt in range(3):
+        try:
+            c = pcp.get_compounds(name, 'name')
+            if c:
+                smiles.append(c[0].connectivity_smiles)
+                names.append(name)
+            break
+        except Exception:
+            time.sleep(1)
+            continue
+    else:
+        print(f'{name} 查询失败，跳过')
+    time.sleep(0.3)
+
+drug_smiles = dict(zip(names, smiles))
+print(drug_smiles)
 
 
 
