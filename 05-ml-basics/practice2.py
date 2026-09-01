@@ -43,6 +43,7 @@ smiles = []
 names = []
 drug_smiles = []
 features = []
+labels = []
 
 for name in items:
     c = pcp.get_compounds(name,'name')
@@ -63,11 +64,23 @@ for name , smile in drug_smiles.items():
     hba  = Descriptors.NumHAcceptors(mol)
     hbd = Descriptors.NumHDonors(mol)
     features.append([mw, logP, hba, hbd])
-    names.append(name)
+    violations = 0
+    if mw > 500:
+        violations += 1
+    if logP > 5:
+        violations += 1
+    if hba > 10:
+        violations += 1
+    if hbd > 5:
+        violations += 1
+    labels.append(1 if violations <= 1 else 0)
+print(labels)
+
 X = np.array(features)
-y = np.array(names)
+y = np.array(labels)
 
 x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42,stratify=y)
 
-model = LogisticRegression(n_estimators=200, random_state=42)
+model = LogisticRegression(max_iter=200, random_state=42)
 model.fit(x_train, y_train)
+print('1')
