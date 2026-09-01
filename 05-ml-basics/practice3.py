@@ -11,6 +11,11 @@ from sklearn.metrics import (accuracy_score, classification_report,
 from rdkit import Chem
 from rdkit.Chem import Descriptors
 
+import pubchempy as pcp
+import time
+
+
+
 items = [
     # 心血管（1-20）
     'enalapril',          'lisinopril',         'perindopril',
@@ -53,3 +58,24 @@ items = [
     'fidaxomicin',        'rifabutin',          'viomycin',
     'nystatin',           'natamycin',
 ]
+
+names = []
+compounds = []
+smiles = []
+drug_smiles = []
+
+#先处理，转换
+for name in items:
+    c = pcp.get_compounds(name, 'name')
+    names.append(name)
+    if c:
+        smile = c[0].connectivity_smiles
+        smiles.append(smile)
+    time.sleep(0.3)  # 避免请求过快被封禁
+print(names)
+
+
+
+
+
+        
