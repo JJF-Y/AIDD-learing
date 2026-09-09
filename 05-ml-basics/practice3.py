@@ -103,24 +103,37 @@ for name , smiles in drug_smiles.items():
         violations += 1
     if hbd > 5:
         violations += 1
-    if tpsa <= 140:
+    if tpsa > 140:
         violations += 1
-    if rotatable <= 3:
+    if rotatable > 10:
         violations += 1
-    if fsp3 <= 0.25:
+    if fsp3 < 0.47:
         violations += 1
     labels.append(1 if violations <= 1 else 0) 
 
 X = np.array(features)
 y = np.array(labels)
 
+feature_names = ['MW', 'LogP', 'HBA', 'HBD', 'TPSA', 'RotatableBonds', 'Fsp3']
+
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
 model1 = RandomForestClassifier(n_estimators=100, random_state=42)
+score = cross_val_score(model1, X_train, y_train, cv=10)
+print(f'交叉验证准确率: {score.mean():.2f} ± {score.std():.2f}')
+
 model1.fit(X_train, y_train)
 y_pred1 = model1.predict(X_test)
 print(f'准确率: {accuracy_score(y_test, y_pred1):.2f}')
+importances1 = model1.feature_importances_
+print("特征重要性:")
+for i, importance1 in enumerate(importances1):
+    print(f"  {feature_names[i]}: {importance1:.3f}")
 
 model2 = RandomForestRegressor(n_estimators=100, random_state=42)
 model2.fit(X_train, y_train)
 y_pred2 = model2.predict(X_test)
 print(f'回归准确率: {r2_score(y_test, y_pred2):.2f}')
+print("特征重要性:")
+importances2 = model2.feature_importances_
+for i, importance2 in enumerate(importances2):
+    print(f"  {feature_names[i]}: {importance2:.3f}")
