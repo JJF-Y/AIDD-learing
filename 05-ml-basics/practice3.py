@@ -61,6 +61,8 @@ items = [
 
 names = []
 smiles = []
+features = []
+labels = []
 
 for name in items:  #遍历
     for attempt in range(3):    #每个最多尝试3次
@@ -78,10 +80,47 @@ for name in items:  #遍历
     time.sleep(0.3)
 
 drug_smiles = dict(zip(names, smiles))
-print(drug_smiles)
 
+for name , smiles in drug_smiles.items():
+    mol = Chem.MolFromSmiles(smiles)
+    if mol == None:
+        print('失败')
+        continue
+    mw   = Descriptors.MolWt(mol)
+    logp = Descriptors.MolLogP(mol)
+    hba  = Descriptors.NumHAcceptors(mol)
+    hbd  = Descriptors.NumHDonors(mol)
+    tpsa = Descriptors.TPSA(mol)
+    rotatable = Descriptors.NumRotatableBonds(mol)
+    fsp3 = Descriptors.FractionCSP3(mol)
+    features.append([mw, logp, hba, hbd, tpsa, rotatable, fsp3])
+    violations = 0
+    if mw > 500:
+        violations += 1
+    if logp > 5:
+        violations += 1
+    if hba > 10:
+        violations += 1
+    if hbd > 5:
+        violations += 1
+    if tpsa <= 140:
+        violations += 1
+    if rotatable <= 3:
+        violations += 1
+    if fsp3 <= 0.25:
+        violations += 1
+    labels.append(1 if violations <= 1 else 0) 
 
+X = np.array(features)
+y = np.array(labels)
 
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+model1 = RandomForestClassifier(n_estimators=100, random_state=42)
+model1.fit(X_train, y_train)
+y_pred1 = model1.predict(X_test)
+print(f'准确率: {accuracy_score(y_test, y_pred1):.2f}')
 
-
-        
+model2 = RandomForestRegressor(n_estimators=100, random_state=42)
+model2.fit(X_train, y_train)
+y_pred2 = model2.predict(X_test)
+print(f'回归准确率: {r2_score(y_test, y_pred2):.2f}')
