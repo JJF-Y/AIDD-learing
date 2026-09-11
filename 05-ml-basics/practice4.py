@@ -207,10 +207,10 @@ drug_names = [
 #为了避免每次测试都要重新获取，所以第一次获取后保存到本地，之后直接读取本地文件即可
 #那么可以先做关于药物SMILES的获取的函数封装，然后再将运行结果进行本地保存
 
-def get_drug_smiles(drug_names, filename='drug_smiles.csv'):
+def get_drug_smiles(name_list, filename='drug_smiles.csv'):
     names = []
     smiles = []
-    for name in drug_names:
+    for name in name_list:
         for attempt in range(3):
             try:
                 c = pcp.get_compounds(name, 'name')
@@ -227,7 +227,7 @@ def get_drug_smiles(drug_names, filename='drug_smiles.csv'):
 
     drug_smiles = dict(zip(names, smiles))
 
-    with open(filename, 'w', newline='') as csvfile:
+    with open(filename, 'w', newline='') as csvfile:    #newline=''是为了避免在Windows上写入时出现空行
         writer = csv.writer(csvfile)
         writer.writerow(['Name', 'SMILES'])
         for name, smiles in drug_smiles.items():
@@ -235,3 +235,5 @@ def get_drug_smiles(drug_names, filename='drug_smiles.csv'):
 
     return drug_smiles
 
+get_drug_smiles(drug_names)
+print("药物SMILES获取完成并保存到drug_smiles.csv")
