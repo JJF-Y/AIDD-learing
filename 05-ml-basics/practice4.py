@@ -310,6 +310,14 @@ def model_fit(X,y,feature_names):
     print("特征重要性:")
     for i, importance1 in enumerate(importances):
         print(f"  {feature_names[i]}: {importance1:.3f}")
-    return model,y_pred
+    return model,X_test,y_test,y_pred
 
-model, y_pred = model_fit(X, y, feature_names)
+model,X_text,y_text,y_pred = model_fit(X, y, feature_names)
+
+def evaluate_model(model, X_test, y_test, y_pred):
+    cm = confusion_matrix(y_test, y_pred)
+    print('混淆矩阵:')
+    print(cm)
+    print(classification_report(y_test, y_pred, target_names=['不合格', '合格']))
+    return cm
+CM = evaluate_model(model,X_text,y_text,y_pred)
