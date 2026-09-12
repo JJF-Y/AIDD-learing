@@ -248,5 +248,3 @@ def get_drug_smiles(name_list, filename='drug_smiles.csv'):
     
     return drug_smiles
 
-get_drug_smiles(drug_names)
-print("药物SMILES获取完成并保存到drug_smiles.csv")
