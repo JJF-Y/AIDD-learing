@@ -293,3 +293,18 @@ X,y = calc_descriptors(drug_smiles)
 print(X.shape)
 print(y.shape)
 
+feature_names = ['MW', 'LogP', 'HBA', 'HBD', 'TPSA', 'RotatableBonds', 'Fsp3']
+
+def model_fit(X,y):
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+    model = RandomForestClassifier(n_estimators=200, random_state=42)
+    score = cross_val_score(model1, X_train, y_train, cv=10)
+    print(f'交叉验证准确率: {score.mean():.2f} ± {score.std():.2f}')
+
+    model.fit(X_train, y_train)
+    y_pred1 = model.predict(X_test)
+    print(f'准确率: {accuracy_score(y_test, y_pred1):.2f}')
+    importances1 = model.feature_importances_
+    print("特征重要性:")
+    for i, importance1 in enumerate(importances1):
+        print(f"  {feature_names[i]}: {importance1:.3f}")
