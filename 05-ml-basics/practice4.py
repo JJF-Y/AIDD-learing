@@ -248,3 +248,48 @@ def get_drug_smiles(name_list, filename='drug_smiles.csv'):
     
     return drug_smiles
 
+def calc_descriptors(drug_smiles):
+    features = []
+    labels = []
+    for name,smiles in drug_smiles.items():
+        mol = Chem.MolFromSmiles(smiles)
+        if mol is None:
+            print(f'{name} 解析失败')
+            continue
+
+        mw= Descriptors.MolWt(mol)
+        logp = Descriptors.MolLogP(mol)
+        hba  = Descriptors.NumHAcceptors(mol)
+        hbd  = Descriptors.NumHDonors(mol)
+        tpsa = Descriptors.TPSA(mol)
+        rotatable = Descriptors.NumRotatableBonds(mol)
+        fsp3 = Descriptors.FractionCSP3(mol)
+        features.append([mw, logp, hba, hbd, tpsa, rotatable, fsp3])
+
+        violations = 0
+        if mw > 500:
+            violations += 1
+        if logp > 5:
+            violations += 1
+        if hba > 10:
+            violations += 1
+        if hbd > 5:
+            violations += 1
+        if tpsa > 140:
+            violations += 1
+        if rotatable > 10:
+            violations += 1
+        if fsp3 < 0.47:
+            violations += 1
+        labels.append(1 if violations <= 1 else 0)
+
+    X = np.array(features)
+    y = np.array(labels)
+    return X,y
+
+drug_smiles = get_drug_smiles(drug_names)
+
+X,y = calc_descriptors(drug_smiles)
+print(X.shape)
+print(y.shape)
+
