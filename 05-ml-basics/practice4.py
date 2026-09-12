@@ -20,6 +20,8 @@ import time
 
 import csv
 
+import os
+
 drug_names = [
     # 心血管-ACEI/ARB（18）
     'enalapril', 'lisinopril', 'perindopril', 'ramipril', 'quinapril',
@@ -208,15 +210,28 @@ drug_names = [
 #那么可以先做关于药物SMILES的获取的函数封装，然后再将运行结果进行本地保存
 
 def get_drug_smiles(name_list, filename='drug_smiles.csv'):
-    names = []
-    smiles = []
-    for name in name_list:
+    
+    drug_smiles = {}
+    if os.path.exists(filename):
+        with open(filename, 'r') as f:
+            reader = csv.reader(f)
+            next(reader) 
+            for row in reader:
+                drug_smiles[row[0]] = row[1]
+    
+    todo = [name for name in name_list if name not in drug_smiles]
+
+    if not todo:
+        print('全部已查询，直接读取缓存')
+        return drug_smiles 
+    print(f'已有 {len(drug_smiles)} 个，还需查询 {len(todo)} 个')
+
+    for name in todo:
         for attempt in range(3):
             try:
                 c = pcp.get_compounds(name, 'name')
                 if c:
-                    smiles.append(c[0].connectivity_smiles)
-                    names.append(name)
+                    drug_smiles[name] = c[0].connectivity_smiles
                 break
             except Exception:
                 time.sleep(1)
@@ -225,14 +240,12 @@ def get_drug_smiles(name_list, filename='drug_smiles.csv'):
             print(f'{name} 查询失败，跳过')
         time.sleep(0.3)
 
-    drug_smiles = dict(zip(names, smiles))
-
-    with open(filename, 'w', newline='') as csvfile:    #newline=''是为了避免在Windows上写入时出现空行
-        writer = csv.writer(csvfile)
+    with open(filename, 'w', newline='') as f:
+        writer = csv.writer(f)
         writer.writerow(['Name', 'SMILES'])
         for name, smiles in drug_smiles.items():
             writer.writerow([name, smiles])
-
+    
     return drug_smiles
 
 get_drug_smiles(drug_names)
