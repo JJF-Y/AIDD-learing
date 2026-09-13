@@ -314,10 +314,18 @@ def model_fit(X,y,feature_names):
 
 model,X_text,y_text,y_pred = model_fit(X, y, feature_names)
 
-def evaluate_model(model, X_test, y_test, y_pred):
+def evaluate_model(model, X_test, y_test, y_pred,test_drugs):
     cm = confusion_matrix(y_test, y_pred)
     print('混淆矩阵:')
     print(cm)
     print(classification_report(y_test, y_pred, target_names=['不合格', '合格']))
-    return cm
-CM = evaluate_model(model,X_text,y_text,y_pred)
+    list = []
+    for name in test_drugs:
+        c = pcp.get_compounds(name,'name')
+        list.append(c)
+        continue
+    return list
+
+test = [ 'sitagliptin','rivaroxaban','apixaban']
+C = evaluate_model(model,X_text,y_text,y_pred,test)
+print(C)
