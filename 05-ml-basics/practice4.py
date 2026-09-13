@@ -297,7 +297,7 @@ print(y.shape)
 
 feature_names = ['MW', 'LogP', 'HBA', 'HBD', 'TPSA', 'RotatableBonds', 'Fsp3']
 
-def model_fit(X,y,feature_names):
+def model_fit_Classifier(X,y,feature_names):
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
     model = RandomForestClassifier(n_estimators=200, random_state=42)
 
@@ -314,7 +314,7 @@ def model_fit(X,y,feature_names):
         print(f"  {feature_names[i]}: {importance1:.3f}")
     return model,X_test,y_test,y_pred
 
-model,X_text,y_text,y_pred = model_fit(X, y, feature_names)
+model,X_text,y_text,y_pred = model_fit_Classifier(X, y, feature_names)
 
 def evaluate_model(model, X_test, y_test, y_pred,test_drugs):
     cm = confusion_matrix(y_test, y_pred)
