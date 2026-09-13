@@ -319,13 +319,13 @@ def evaluate_model(model, X_test, y_test, y_pred,test_drugs):
     print('混淆矩阵:')
     print(cm)
     print(classification_report(y_test, y_pred, target_names=['不合格', '合格']))
-    list = []
-    for name in test_drugs:
-        c = pcp.get_compounds(name,'name')
-        list.append(c)
-        continue
-    return list
+    return cm
 
-test = [ 'sitagliptin','rivaroxaban','apixaban']
-C = evaluate_model(model,X_text,y_text,y_pred,test)
-print(C)
+test_drugs = [ 'sitagliptin','rivaroxaban','apixaban','saxagliptin','dabigatran','linagliptin','ertugliflozin','empagliflozin']
+test_smiles = get_drug_smiles(test_drugs,"text_drug_smiles.csv")
+
+X_new, y_new = calc_descriptors(test_smiles)
+predictions = model.predict(X_new)
+
+for name,pred,actual in zip(test_smiles.keys(),predictions,y_new):
+    print(f'{name}:预测={pred}, 实际={actual}')
