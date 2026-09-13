@@ -493,3 +493,7 @@ edetate,C(CN(CC(=O)[O-])CC(=O)[O-])N(CC(=O)[O-])CC(=O)[O-].[Na+].[Na+].[Na+].[Na
 chlordiazepoxide,CN=C1CN(C(=C2C=C(C=CC2=N1)Cl)C3=CC=CC=C3)O
 armodafinil,C1=CC=C(C=C1)C(C2=CC=CC=C2)S(=O)CC(=O)N
 omeprazole,CC1=CN=C(C(=C1OC)C)CS(=O)C2=NC3=C(N2)C=C(C=C3)OC
+saxagliptin,C1C2CC2N(C1C#N)C(=O)C(C34CC5CC(C3)CC(C5)(C4)O)N
+linagliptin,CC#CCN1C2=C(N=C1N3CCCC(C3)N)N(C(=O)N(C2=O)CC4=NC5=CC=CC=C5C(=N4)C)C
+ertugliflozin,CCOC1=CC=C(C=C1)CC2=C(C=CC(=C2)C34C(C(C(C(O3)(CO4)CO)O)O)O)Cl
+empagliflozin,C1COCC1OC2=CC=C(C=C2)CC3=C(C=CC(=C3)C4C(C(C(C(O4)CO)O)O)O)Cl
