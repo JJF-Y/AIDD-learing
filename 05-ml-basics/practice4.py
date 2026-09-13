@@ -251,6 +251,7 @@ def get_drug_smiles(name_list, filename='drug_smiles.csv'):
 def calc_descriptors(drug_smiles):
     features = []
     labels = []
+    violations_list = []
     for name,smiles in drug_smiles.items():
         mol = Chem.MolFromSmiles(smiles)
         if mol is None:
@@ -281,15 +282,16 @@ def calc_descriptors(drug_smiles):
             violations += 1
         if fsp3 < 0.47:
             violations += 1
+        violations_list.append(violations)
         labels.append(1 if violations <= 1 else 0)
 
     X = np.array(features)
     y = np.array(labels)
-    return X,y
+    return X,y,violations_list
 
 drug_smiles = get_drug_smiles(drug_names)
 
-X,y = calc_descriptors(drug_smiles)
+X,y ,violations= calc_descriptors(drug_smiles)
 print(X.shape)
 print(y.shape)
 
@@ -321,11 +323,30 @@ def evaluate_model(model, X_test, y_test, y_pred,test_drugs):
     print(classification_report(y_test, y_pred, target_names=['不合格', '合格']))
     return cm
 
-test_drugs = [ 'sitagliptin','rivaroxaban','apixaban','saxagliptin','dabigatran','linagliptin','ertugliflozin','empagliflozin']
+test_drugs = [ 'sitagliptin', 'rivaroxaban', 'apixaban', 'saxagliptin', 'dabigatran', 'linagliptin', 'ertugliflozin', 'empagliflozin']
 test_smiles = get_drug_smiles(test_drugs,"text_drug_smiles.csv")
 
-X_new, y_new = calc_descriptors(test_smiles)
+X_new, y_new, new_violations= calc_descriptors(test_smiles)
 predictions = model.predict(X_new)
+print(new_violations)
 
-for name,pred,actual in zip(test_smiles.keys(),predictions,y_new):
+for name, pred,actual in zip(test_smiles.keys(), predictions, y_new):
     print(f'{name}:预测={pred}, 实际={actual}')
+
+def model_fit_regression(X,y_reg):
+    X_train, X_test, y_train, y_test = train_test_split(X, y_reg, test_size=0.3, random_state=42)
+
+    model_reg = RandomForestRegressor(n_estimators=200, random_state=42)
+    model_reg.fit(X_train, y_train)
+
+    y_pred_reg = model_reg.predict(X_test)
+
+    mse = mean_squared_error(y_test, y_pred_reg)
+    r2 = r2_score(y_test, y_pred_reg)
+
+    print(f"回归模型MSE: {mse:.2f}")
+    print(f"回归模型R²: {r2:.2f}")
+
+    return model_reg
+
+model_regressor = model_fit_regression(X, violations)
