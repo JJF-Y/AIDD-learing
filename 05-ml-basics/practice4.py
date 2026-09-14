@@ -7,6 +7,8 @@ from cProfile import label
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+plt.rcParams['font.sans-serif'] = ['Microsoft YaHei']
+plt.rcParams['axes.unicode_minus'] = False
 
 from sklearn.model_selection import train_test_split, cross_val_score
 from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
@@ -168,7 +170,7 @@ def plot_feature_importance(importances, feature_names):
     plt.savefig('feature_importance.png', dpi=300)
     plt.show()
 
-def plot_descriptors_hist(X, feature_names):
+def plot_descriptors_hist(X, feature_names):   
     fig, axes = plt.subplots(2, 4, figsize=(16, 8))
     axes = axes.flatten()
 
@@ -186,7 +188,7 @@ def plot_descriptors_hist(X, feature_names):
     plt.savefig('descriptors_distribution.png', dpi=300)
     plt.show()
 
-def plot_confusion_matrix(y_true, y_pred, labels=['合格', '不合格']):
+def plot_confusion_matrix(y_true, y_pred, labels=['Fail', 'Pass']):
     cm = confusion_matrix(y_true, y_pred)
 
     fig, ax =plt.subplots(figsize=(6,5))
@@ -194,7 +196,7 @@ def plot_confusion_matrix(y_true, y_pred, labels=['合格', '不合格']):
 
     cbar = ax.figure.colorbar(im, ax=ax)
     cbar.ax.set_ylabel('Count', rotation=-90, va='bottom')
-    
+
     ax.set_xticks(range(len(labels)))
     ax.set_yticks(range(len(labels)))
     ax.set_xticklabels(labels)
@@ -209,9 +211,9 @@ def plot_confusion_matrix(y_true, y_pred, labels=['合格', '不合格']):
             ax.text(j, i, str(cm[i, j]),
                     ha='center', va='center', color=text_color)
 
-            plt.tight_layout()
-            plt.savefig('confusion_matrix.png', dpi=300)
-            plt.show()
+    plt.tight_layout()
+    plt.savefig('confusion_matrix.png', dpi=300)
+    plt.show()
 
 drug_smiles = get_drug_smiles(drug_names)
 
