@@ -160,7 +160,7 @@ def plot_feature_importance(importances, feature_names):
     ax.bar(range(len(sorted_importances)), sorted_importances)
     ax.set_xticks(range(len(sorted_names)))
     ax.set_xticklabels(sorted_names, rotation=45, ha='right')
-    ax.set_ylabel('Imoprtance')
+    ax.set_ylabel('Improtance')
     ax.set_title('Feature Importance')
     plt.tight_layout()
     plt.savefig('feature_importance.png', dpi=300)
