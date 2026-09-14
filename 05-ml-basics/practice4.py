@@ -111,50 +111,6 @@ def calc_descriptors(drug_smiles):
     y = np.array(labels)
     return X,y,violations_list
 
-drug_smiles = get_drug_smiles(drug_names)
-
-X,y ,violations= calc_descriptors(drug_smiles)
-print(X.shape)
-print(y.shape)
-
-feature_names = ['MW', 'LogP', 'HBA', 'HBD', 'TPSA', 'RotatableBonds', 'Fsp3']
-
-def model_fit_Classifier(X,y,feature_names):
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
-    model = RandomForestClassifier(n_estimators=200, random_state=42)
-
-    scores = cross_val_score(model, X_train, y_train, cv=10)
-    print(f'交叉验证准确率: {scores.mean():.2f} ± {scores.std():.2f}')
-
-    model.fit(X_train, y_train)
-    y_pred = model.predict(X_test)
-    print(f'准确率: {accuracy_score(y_test, y_pred):.2f}')
-
-    importances = model.feature_importances_
-    print("特征重要性:")
-    for i, importance1 in enumerate(importances):
-        print(f"  {feature_names[i]}: {importance1:.3f}")
-    return model,X_test,y_test,y_pred
-
-model,X_text,y_text,y_pred = model_fit_Classifier(X, y, feature_names)
-
-def evaluate_model(model, X_test, y_test, y_pred,test_drugs):
-    cm = confusion_matrix(y_test, y_pred)
-    print('混淆矩阵:')
-    print(cm)
-    print(classification_report(y_test, y_pred, target_names=['不合格', '合格']))
-    return cm
-
-from test_drugs_500 import test_drugs
-test_smiles = get_drug_smiles(test_drugs,"text_drug_smiles.csv")
-
-X_new, y_new, new_violations= calc_descriptors(test_smiles)
-predictions = model.predict(X_new)
-print(new_violations)
-
-for name, pred,actual in zip(test_smiles.keys(), predictions, y_new):
-    print(f'{name}:预测={pred}, 实际={actual}')
-
 def model_fit_regression(X,y_reg):
     X_train, X_test, y_train, y_test = train_test_split(X, y_reg, test_size=0.3, random_state=42)
 
@@ -171,10 +127,31 @@ def model_fit_regression(X,y_reg):
 
     return model_reg
 
-model_regressor = model_fit_regression(X, violations)
+def model_fit_Classifier(X,y,feature_names):
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+    model = RandomForestClassifier(n_estimators=200, random_state=42)
 
-def plot_feature_importance(model, feature_names):
+    scores = cross_val_score(model, X_train, y_train, cv=10)
+    print(f'交叉验证准确率: {scores.mean():.2f} ± {scores.std():.2f}')
+
+    model.fit(X_train, y_train)
+    y_pred = model.predict(X_test)
+    print(f'准确率: {accuracy_score(y_test, y_pred):.2f}')
+
     importances = model.feature_importances_
+    print("特征重要性:")
+    for i, importance1 in enumerate(importances):
+        print(f"  {feature_names[i]}: {importance1:.3f}")
+    return model,X_test,y_test,y_pred,importances
+
+def evaluate_model(model, X_test, y_test, y_pred,test_drugs):
+    cm = confusion_matrix(y_test, y_pred)
+    print('混淆矩阵:')
+    print(cm)
+    print(classification_report(y_test, y_pred, target_names=['不合格', '合格']))
+    return cm
+
+def plot_feature_importance(importances, feature_names):
     indices = np.argsort(importances)[::-1]
     sorted_names = [feature_names[i] for i in indices]
     sorted_importances = importances[indices]
@@ -188,3 +165,21 @@ def plot_feature_importance(model, feature_names):
     plt.tight_layout()
     plt.savefig('feature_importance.png', dpi=300)
     plt.show()
+
+drug_smiles = get_drug_smiles(drug_names)
+
+X,y ,violations= calc_descriptors(drug_smiles)
+
+feature_names = ['MW', 'LogP', 'HBA', 'HBD', 'TPSA', 'RotatableBonds', 'Fsp3']
+
+model, X_text, y_text, y_pred, importance_Classifier = model_fit_Classifier(X, y, feature_names)
+
+from test_drugs_500 import test_drugs
+test_smiles = get_drug_smiles(test_drugs,"text_drug_smiles.csv")
+
+X_new, y_new, new_violations= calc_descriptors(test_smiles)
+predictions = model.predict(X_new)
+
+model_regressor = model_fit_regression(X, violations)
+
+text = plot_feature_importance(importance_Classifier,feature_names)
