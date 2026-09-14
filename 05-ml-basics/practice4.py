@@ -2,6 +2,8 @@
 
 #先简单捋一下思路，先获取药名，再根据药名获取药物的相关信息，然后进行数据清洗和预处理，最后进行模型训练和评估。同时尝试优化原有的思路
 
+from cProfile import label
+
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -184,6 +186,33 @@ def plot_descriptors_hist(X, feature_names):
     plt.savefig('descriptors_distribution.png', dpi=300)
     plt.show()
 
+def plot_confusion_matrix(y_true, y_pred, labels=['合格', '不合格']):
+    cm = confusion_matrix(y_true, y_pred)
+
+    fig, ax =plt.subplots(figsize=(6,5))
+    im = ax.imshow(cm, cmap='Blues')
+
+    cbar = ax.figure.colorbar(im, ax=ax)
+    cbar.ax.set_ylabel('Count', rotation=-90, va='bottom')
+    
+    ax.set_xticks(range(len(labels)))
+    ax.set_yticks(range(len(labels)))
+    ax.set_xticklabels(labels)
+    ax.set_yticklabels(labels)
+    ax.set_xlabel('Predicted')
+    ax.set_ylabel('True')
+    ax.set_title('Confusion Matrix')
+
+    for i in range(len(labels)):
+        for j in range(len(labels)):
+            text_color = 'white' if cm[i, j] >cm.max() / 2 else 'black'
+            ax.text(j, i, str(cm[i, j]),
+                    ha='center', va='center', color=text_color)
+
+            plt.tight_layout()
+            plt.savefig('confusion_matrix.png', dpi=300)
+            plt.show()
+
 drug_smiles = get_drug_smiles(drug_names)
 
 X,y ,violations= calc_descriptors(drug_smiles)
@@ -200,4 +229,4 @@ predictions = model.predict(X_new)
 
 model_regressor = model_fit_regression(X, violations)
 
-try_num = plot_descriptors_hist(X, feature_names)
+try_1 = plot_confusion_matrix(y_text, y_pred)
