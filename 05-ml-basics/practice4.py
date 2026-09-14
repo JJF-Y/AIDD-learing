@@ -172,4 +172,19 @@ def model_fit_regression(X,y_reg):
     return model_reg
 
 model_regressor = model_fit_regression(X, violations)
-print('1')
+
+def plot_feature_importance(model, feature_names):
+    importances = model.feature_importances_
+    indices = np.argsort(importances)[::-1]
+    sorted_names = [feature_names[i] for i in indices]
+    sorted_importances = importances[indices]
+
+    fig, ax = plt.subplots(figsize=(8, 4))
+    ax.bar(range(len(sorted_importances)), sorted_importances)
+    ax.set_xticks(range(len(sorted_names)))
+    ax.set_xticklabels(sorted_names, rotation=45, ha='right')
+    ax.set_ylabel('Imoprtance')
+    ax.set_title('Feature Importance')
+    plt.tight_layout()
+    plt.savefig('feature_importance.png', dpi=300)
+    plt.show()
