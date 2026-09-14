@@ -166,6 +166,24 @@ def plot_feature_importance(importances, feature_names):
     plt.savefig('feature_importance.png', dpi=300)
     plt.show()
 
+def plot_descriptors_hist(X, feature_names):
+    fig, axes = plt.subplots(2, 4, figsize=(16, 8))
+    axes = axes.flatten()
+
+    for i in range(len(feature_names)):
+        ax = axes[i]
+        ax.hist(X[:, i], bins=30, edgecolor='black', alpha=0.7)
+        ax.set_title(feature_names[i])
+        ax.set_xlabel(feature_names[i])
+        ax.set_ylabel('Count')
+
+    axes[7].text(0.5, 0.5, f'Total: {len(X)} drugs', ha='center', va='center', fontsize=14)
+    axes[7].axis('off')
+
+    plt.tight_layout()
+    plt.savefig('descriptors_distribution.png', dpi=300)
+    plt.show()
+
 drug_smiles = get_drug_smiles(drug_names)
 
 X,y ,violations= calc_descriptors(drug_smiles)
@@ -182,4 +200,4 @@ predictions = model.predict(X_new)
 
 model_regressor = model_fit_regression(X, violations)
 
-text = plot_feature_importance(importance_Classifier,feature_names)
+try_num = plot_descriptors_hist(X, feature_names)
