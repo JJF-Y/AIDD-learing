@@ -2,8 +2,6 @@
 
 #先简单捋一下思路，先获取药名，再根据药名获取药物的相关信息，然后进行数据清洗和预处理，最后进行模型训练和评估。同时尝试优化原有的思路
 
-from cProfile import label
-
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -21,14 +19,9 @@ from rdkit.Chem import Descriptors
 import pubchempy as pcp
 
 import time
-
 import csv
-
 import os
 
-import sys
-parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.insert(0, parent_dir)
 from drug_names_500 import drug_names
 from test_drugs_500 import test_drugs
 
@@ -223,7 +216,6 @@ feature_names = ['MW', 'LogP', 'HBA', 'HBD', 'TPSA', 'RotatableBonds', 'Fsp3']
 
 model, X_text, y_text, y_pred, importance_Classifier = model_fit_Classifier(X, y, feature_names)
 
-from test_drugs_500 import test_drugs
 test_smiles = get_drug_smiles(test_drugs,"text_drug_smiles.csv")
 
 X_new, y_new, new_violations= calc_descriptors(test_smiles)
