@@ -17,5 +17,4 @@ def load_data(filepath):
             fail_count += 1
     clean_df = pd.DataFrame(vaild_rows).reset_index(drop=True)
     print(f'数据加载完成: 共{total}条, 有效{len(clean_df)}条, 失败{fail_count}条')
-
-c = load_data("caco2_wang.csv")
+    return clean_df
