@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AIDD 论文阅读辅助</title>
+<style>
+  :root {
+    --bg: #101011;
+    --surface: #1a1a1c;
+    --surface-muted: #222224;
+    --text: #e0e0e0;
+    --text-muted: #8a8a8e;
+    --accent: #c9b896;
+    --border: rgba(255,255,255,0.08);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, "PingFang SC", "Segoe UI", system-ui, sans-serif;
+    line-height: 1.6;
+    padding: 20px 16px 40px;
+    max-width: 640px;
+    margin: 0 auto;
+  }
+  h1 { font-size: 20px; font-weight: 600; margin-bottom: 4px; }
+  h2 { font-size: 17px; font-weight: 600; margin: 24px 0 12px; color: var(--accent); border-bottom: 1px solid var(--border); padding-bottom: 6px; }
+  .subtitle { color: var(--text-muted); font-size: 13px; margin-bottom: 20px; }
+  .paper { background: var(--surface); border-radius: 10px; padding: 16px; margin-bottom: 12px; }
+  .paper-title { font-size: 15px; font-weight: 500; line-height: 1.4; margin-bottom: 6px; }
+  .paper-meta { font-size: 12px; color: var(--text-muted); margin-bottom: 8px; }
+  .paper-desc { font-size: 13px; color: var(--text-muted); line-height: 1.5; margin-bottom: 10px; }
+  .paper-link { display: inline-block; font-size: 13px; color: var(--accent); text-decoration: none; border: 1px solid var(--border); padding: 5px 12px; border-radius: 6px; }
+  .tag { display: inline-block; font-size: 11px; color: var(--text-muted); background: rgba(255,255,255,0.05); padding: 2px 8px; border-radius: 4px; margin-right: 6px; }
+  .glossary { background: var(--surface); border-radius: 10px; padding: 16px; margin-bottom: 12px; }
+  .glossary-term { font-size: 14px; font-weight: 500; color: var(--accent); margin-bottom: 2px; }
+  .glossary-en { font-size: 12px; color: var(--text-muted); font-family: monospace; margin-bottom: 2px; }
+  .glossary-def { font-size: 13px; color: var(--text); line-height: 1.5; }
+  .tip { background: var(--surface-muted); border-radius: 8px; padding: 12px; margin-bottom: 10px; font-size: 13px; color: var(--text-muted); line-height: 1.6; }
+  .tip strong { color: var(--text); }
+  .section { margin-top: 28px; }
+</style>
+</head>
+<body>
+
+<h1>AIDD 论文阅读辅助</h1>
+<p class="subtitle">中文综述 + 英文术语对照表 + 阅读策略</p>
+
+<h2>中文综述推荐</h2>
+
+<div class="paper">
+  <div class="paper-title">人工智能技术在先导化合物发现与优化中的应用进展</div>
+  <div class="paper-meta">李紫玥 等 · 2024 · 药学学报 59(9): 2443-2453</div>
+  <div class="paper-desc">中国药科大学出品，药学专业视角。覆盖先导化合物发现、ADMET预测、分子生成等。和你正在学的内容直接对应，术语都是中文的。</div>
+  <span class="tag">药学专业</span><span class="tag">先读这篇</span>
+  <br><br>
+  <a class="paper-link" href="https://www.yxxb.com.cn/aps/cn/article/doi/10.16438/j.0513-4870.2024-0221">在线阅读</a>
+</div>
+
+<div class="paper">
+  <div class="paper-title">图模型在分子信息学中的研究综述与展望</div>
+  <div class="paper-meta">戴嘉欣 等 · 2025 · 工程科学学报 47(12): 2479-2497</div>
+  <div class="paper-desc">北京科技大学。系统介绍分子表示方法（描述符、指纹、图），有MACCS、ECFP/Morgan指纹的详细对比。对应你第2步特征工程。</div>
+  <span class="tag">分子表示</span><span class="tag">特征工程</span>
+  <br><br>
+  <a class="paper-link" href="https://cje.ustb.edu.cn/article/doi/10.13374/j.issn2095-9389.2025.03.02.002?viewType=HTML">在线阅读</a>
+</div>
+
+<div class="paper">
+  <div class="paper-title">基于人工智能的小分子生成模型在药物发现中的研究进展</div>
+  <div class="paper-meta">2024 · 中国药科大学学报</div>
+  <div class="paper-desc">介绍GAN、VAE、扩散模型等生成模型在药物设计中的应用。偏进阶方向，读前两篇后再看。</div>
+  <span class="tag">进阶</span>
+  <br><br>
+  <a class="paper-link" href="https://jcpu.cpu.edu.cn/article/doi/10.11665/j.issn.1000-5048.2024031501">在线阅读</a>
+</div>
+
+<div class="paper">
+  <div class="paper-title">综述：人工智能辅助小分子药物发现——从分子设计到临床转化</div>
+  <div class="paper-meta">2025 · 生物通（转载综述）</div>
+  <div class="paper-desc">系统梳理AI在小分子药物发现全流程的进展，覆盖分子表征、生成模型、性质预测。中文，篇幅较长但内容全面。</div>
+  <span class="tag">全流程</span>
+  <br><br>
+  <a class="paper-link" href="https://m.ebiotrade.com/newsf/2025-12/20251227000317131.htm">在线阅读</a>
+</div>
+
+<div class="paper">
+  <div class="paper-title">从直觉到人工智能：药物发现中的小分子表征演变</div>
+  <div class="paper-meta">2026 · CSDN 博客</div>
+  <div class="paper-desc">通俗易懂的中文博客，讲分子表示从描述符到指纹到图神经网络到语言模型的演变。适合快速建立全局认知。</div>
+  <span class="tag">通俗易懂</span><span class="tag">博客</span>
+  <br><br>
+  <a class="paper-link" href="https://xinzhe.blog.csdn.net/article/details/153623968">在线阅读</a>
+</div>
+
+<div class="section">
+<h2>英文术语对照表</h2>
+<p class="subtitle">读英文论文时随时查，按你的4个步骤分组</p>
+</div>
+
+<h2>第1步：数据</h2>
+
+<div class="glossary">
+  <div class="glossary-term">吸收、分布、代谢、排泄、毒性</div>
+  <div class="glossary-en">ADMET (Absorption, Distribution, Metabolism, Excretion, Toxicity)</div>
+  <div class="glossary-def">药物在体内的五个关键药代动力学性质。TDC数据库里ADME类数据集就是这些。</div>
+</div>
+
+<div class="glossary">
+  <div class="glossary-term">定量构效关系</div>
+  <div class="glossary-en">QSAR (Quantitative Structure-Activity Relationship)</div>
+  <div class="glossary-def">用数学模型建立分子结构和生物活性之间的关系。你正在做的就是QSAR建模。</div>
+</div>
+
+<div class="glossary">
+  <div class="glossary-term">简化分子线性输入规范</div>
+  <div class="glossary-en">SMILES (Simplified Molecular Input Line Entry System)</div>
+  <div class="glossary-def">用文本字符串表示分子结构。如阿司匹林: CC(=O)Oc1ccccc1C(=O)O</div>
+</div>
+
+<div class="glossary">
+  <div class="glossary-term">类药性</div>
+  <div class="glossary-en">Drug-likeness</div>
+  <div class="glossary-def">分子是否具备成为药物的特征。Lipinski规则是判断类药性的一种方法。</div>
+</div>
+
+<h2>第2步：特征工程</h2>
+
+<div class="glossary">
+  <div class="glossary-term">分子描述符</div>
+  <div class="glossary-en">Molecular Descriptor</div>
+  <div class="glossary-def">人工计算的分子性质数值（MW, LogP, TPSA等）。你之前用的7个就是描述符。</div>
+</div>
+
+<div class="glossary">
+  <div class="glossary-term">分子指纹</div>
+  <div class="glossary-en">Molecular Fingerprint</div>
+  <div class="glossary-def">将分子结构编码成二进制向量。每个bit表示某个子结构是否存在。</div>
+</div>
+
+<div class="glossary">
+  <div class="glossary-term">扩展连接性指纹 / Morgan指纹</div>
+  <div class="glossary-en">ECFP (Extended Connectivity Fingerprint) / Morgan Fingerprint</div>
+  <div class="glossary-def">最常见的圆形指纹。以每个原子为中心，看周围radius层（通常2层）的子结构。RDKit中用GetMorganFingerprintAsBitVect生成。</div>
+</div>
+
+<div class="glossary">
+  <div class="glossary-term">特征工程 / 分子表示</div>
+  <div class="glossary-en">Feature Engineering / Molecular Representation</div>
+  <div class="glossary-def">将分子转化为计算机可读的数字向量。这步决定模型性能上限。</div>
+</div>
+
+<div class="glossary">
+  <div class="glossary-term">稀疏向量</div>
+  <div class="glossary-en">Sparse Vector</div>
+  <div class="glossary-def">大部分元素为0的向量。2048维Morgan指纹通常只有几十个1，其余全0，就是稀疏的。</div>
+</div>
+
+<h2>第3步：模型</h2>
+
+<div class="glossary">
+  <div class="glossary-term">随机森林</div>
+  <div class="glossary-en">Random Forest (RF)</div>
+  <div class="glossary-def">建多棵决策树投票。你之前用的n_estimators=200就是建200棵树。</div>
+</div>
+
+<div class="glossary">
+  <div class="glossary-term">支持向量机</div>
+  <div class="glossary-en">SVM (Support Vector Machine)</div>
+  <div class="glossary-def">找一个最优超平面将不同类别分开。在高维稀疏数据（如指纹）上效果好。</div>
+</div>
+
+<div class="glossary">
+  <div class="glossary-term">梯度提升树</div>
+  <div class="glossary-en">XGBoost / Gradient Boosting</div>
+  <div class="glossary-def">逐步训练，每棵新树修正上一棵的错误。业界比赛常用。</div>
+</div>
+
+<div class="glossary">
+  <div class="glossary-term">交叉验证</div>
+  <div class="glossary-en">Cross-Validation (CV)</div>
+  <div class="glossary-def">将数据分成K份，轮流用K-1份训练、1份验证，取平均。你之前用cv=10。</div>
+</div>
+
+<div class="glossary">
+  <div class="glossary-term">超参数</div>
+  <div class="glossary-en">Hyperparameter</div>
+  <div class="glossary-def">模型训练前需要人为设定的参数（如n_estimators、max_depth）。不是从数据学出来的。</div>
+</div>
+
+<h2>第4步：验证</h2>
+
+<div class="glossary">
+  <div class="glossary-term">训练集 / 测试集</div>
+  <div class="glossary-en">Training Set / Test Set</div>
+  <div class="glossary-def">训练集用于学习参数，测试集用于评估泛化能力。模型不能见过测试集数据。</div>
+</div>
+
+<div class="glossary">
+  <div class="glossary-term">随机切分</div>
+  <div class="glossary-en">Random Split</div>
+  <div class="glossary-def">train_test_split的默认方式。可能导致训练集和测试集有结构相似的分子，分数虚高。</div>
+</div>
+
+<div class="glossary">
+  <div class="glossary-term">骨架切分</div>
+  <div class="glossary-en">Scaffold Split</div>
+  <div class="glossary-def">按Murcko骨架分组，训练集和测试集的骨架不重叠。更接近真实场景。</div>
+</div>
+
+<div class="glossary">
+  <div class="glossary-term">Murcko骨架</div>
+  <div class="glossary-en">Murcko Scaffold / Bemis-Murcko Scaffold</div>
+  <div class="glossary-def">剥离分子侧链后的核心环系结构。用于scaffold split的分组依据。</div>
+</div>
+
+<div class="glossary">
+  <div class="glossary-term">泛化能力</div>
+  <div class="glossary-en">Generalization</div>
+  <div class="glossary-def">模型对未见过数据的预测能力。训练集分数高≠泛化好。</div>
+</div>
+
+<div class="glossary">
+  <div class="glossary-term">过拟合</div>
+  <div class="glossary-en">Overfitting</div>
+  <div class="glossary-def">模型"记住"了训练数据而非学到规律，在新数据上表现差。</div>
+</div>
+
+<div class="glossary">
+  <div class="glossary-term">数据泄露</div>
+  <div class="glossary-en">Data Leakage</div>
+  <div class="glossary-def">训练集和测试集有信息重叠（如相似分子），导致分数虚高。随机切分常有这个问题。</div>
+</div>
+
+<h2>评估指标</h2>
+
+<div class="glossary">
+  <div class="glossary-term">准确率</div>
+  <div class="glossary-en">Accuracy</div>
+  <div class="glossary-def">预测正确的比例。分类任务常用。</div>
+</div>
+
+<div class="glossary">
+  <div class="glossary-term">精确率 / 召回率 / F1</div>
+  <div class="glossary-en">Precision / Recall / F1-score</div>
+  <div class="glossary-def">分类的多维度评估。precision=预测为正中真正为正的比例；recall=真正为正中被预测为正的比例。</div>
+</div>
+
+<div class="glossary">
+  <div class="glossary-term">均方误差</div>
+  <div class="glossary-en">MSE (Mean Squared Error)</div>
+  <div class="glossary-def">预测值和真实值差的平方取平均。回归任务指标，越小越好。</div>
+</div>
+
+<div class="glossary">
+  <div class="glossary-term">决定系数</div>
+  <div class="glossary-en">R² (Coefficient of Determination)</div>
+  <div class="glossary-def">回归模型解释的方差比例。范围0-1，越接近1越好。</div>
+</div>
+
+<div class="glossary">
+  <div class="glossary-term">接收者操作特征曲线</div>
+  <div class="glossary-en">ROC-AUC (Area Under the Receiver Operating Characteristic Curve)</div>
+  <div class="glossary-def">分类模型在不同阈值下的整体表现。AUC=1完美，0.5随机猜。</div>
+</div>
+
+<h2>读英文论文的策略</h2>
+
+<div class="tip">
+  <strong>1. 不要从头读到尾。</strong> 先读Abstract（摘要）和Conclusion（结论），判断这篇和你需要的相关不。相关再继续。
+</div>
+
+<div class="tip">
+  <strong>2. 跳过数学公式。</strong> 第一遍不需要看懂每个公式。先理解"这步在干什么、为什么需要"，公式细节后面用到了再回来看。
+</div>
+
+<div class="tip">
+  <strong>3. 重点看图表。</strong> 综述论文的核心信息都在表里——"什么方法用于什么任务、效果如何"。表格比文字信息密度高得多。
+</div>
+
+<div class="tip">
+  <strong>4. 用翻译工具辅助。</strong> 推荐用DeepL（deepl.com）或Google Translate，整段翻译对比着看。遇到术语查上面的对照表。不要逐句翻译，先看中文综述建立概念，再回英文论文看细节。
+</div>
+
+<div class="tip">
+  <strong>5. 阅读顺序建议。</strong> 先读中文的"药学学报2024"那篇建立框架 → 再读CSDN博客理解分子表示演变 → 然后用术语对照表辅助读英文的Carracedo 2021那篇。
+</div>
+
+</body>
+</html>

@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TDC 药物发现ML实战指南</title>
+<style>
+  :root {
+    --bg: #0f0f10;
+    --surface: #1a1a1c;
+    --surface-2: #222225;
+    --border: rgba(255,255,255,0.08);
+    --text: #e2e2e3;
+    --text-muted: #8a8a8e;
+    --accent: #c9b896;
+    --accent-2: #7ba3c7;
+    --code-bg: #151517;
+    --warn: #d4a574;
+    --good: #7cb68a;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, "PingFang SC", "Microsoft YaHei", "Segoe UI", system-ui, sans-serif;
+    line-height: 1.7;
+    padding: 24px 16px 60px;
+    max-width: 760px;
+    margin: 0 auto;
+    font-size: 15px;
+  }
+  h1 { font-size: 24px; font-weight: 700; margin-bottom: 6px; letter-spacing: 0.5px; }
+  h2 { font-size: 19px; font-weight: 600; margin: 36px 0 14px; color: var(--accent); padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+  h3 { font-size: 16px; font-weight: 600; margin: 24px 0 10px; color: var(--accent-2); }
+  h4 { font-size: 14px; font-weight: 600; margin: 18px 0 8px; color: var(--text); }
+  .subtitle { color: var(--text-muted); font-size: 13px; margin-bottom: 24px; }
+  .toc { background: var(--surface); border-radius: 10px; padding: 18px 20px; margin-bottom: 28px; }
+  .toc-title { font-size: 13px; color: var(--text-muted); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; }
+  .toc ol { padding-left: 20px; }
+  .toc li { margin: 4px 0; }
+  .toc a { color: var(--text); text-decoration: none; font-size: 14px; }
+  .toc a:hover { color: var(--accent); }
+  .step-badge { display: inline-block; background: var(--accent); color: #1a1a1c; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 4px; margin-right: 8px; vertical-align: middle; }
+  pre {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 16px;
+    overflow-x: auto;
+    margin: 12px 0;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+  code {
+    font-family: "JetBrains Mono", "Fira Code", Consolas, monospace;
+    font-size: 13px;
+  }
+  p code, li code {
+    background: var(--surface-2);
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-size: 13px;
+  }
+  .note {
+    background: rgba(201, 184, 150, 0.08);
+    border-left: 3px solid var(--accent);
+    padding: 12px 16px;
+    border-radius: 0 6px 6px 0;
+    margin: 14px 0;
+    font-size: 14px;
+  }
+  .warn {
+    background: rgba(212, 165, 116, 0.08);
+    border-left: 3px solid var(--warn);
+    padding: 12px 16px;
+    border-radius: 0 6px 6px 0;
+    margin: 14px 0;
+    font-size: 14px;
+  }
+  .good {
+    background: rgba(124, 182, 138, 0.08);
+    border-left: 3px solid var(--good);
+    padding: 12px 16px;
+    border-radius: 0 6px 6px 0;
+    margin: 14px 0;
+    font-size: 14px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 14px 0;
+    font-size: 13px;
+  }
+  th, td {
+    padding: 8px 12px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+  th {
+    background: var(--surface-2);
+    font-weight: 600;
+    color: var(--accent);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  tr:hover { background: rgba(255,255,255,0.02); }
+  ul, ol { padding-left: 22px; margin: 10px 0; }
+  li { margin: 4px 0; }
+  .divider { height: 1px; background: var(--border); margin: 30px 0; }
+  .key-concept {
+    background: var(--surface);
+    border-radius: 8px;
+    padding: 14px 16px;
+    margin: 12px 0;
+  }
+  .key-concept .label {
+    font-size: 11px;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+    font-weight: 600;
+  }
+  .comparison {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin: 14px 0;
+  }
+  .comparison > div {
+    background: var(--surface);
+    border-radius: 8px;
+    padding: 14px;
+  }
+  .comparison h4 { margin-top: 0; }
+  @media (max-width: 600px) {
+    .comparison { grid-template-columns: 1fr; }
+    body { padding: 16px 12px 40px; font-size: 14px; }
+    h1 { font-size: 20px; }
+    h2 { font-size: 17px; }
+    pre { font-size: 12px; padding: 10px 12px; }
+  }
+</style>
+</head>
+<body>
+
+<h1>TDC 药物发现 ML 实战指南</h1>
+<p class="subtitle">从数据加载到模型验证的完整流程 · 配套代码与原理讲解</p>
+
+<div class="toc">
+  <div class="toc-title">目录</div>
+  <ol>
+    <li><a href="#step0">第0步：环境准备（安装 PyTDC）</a></li>
+    <li><a href="#step1">第1步：数据加载与探索</a></li>
+    <li><a href="#step2">第2步：特征工程（描述符 vs 指纹）</a></li>
+    <li><a href="#step3">第3步：多模型对比训练</a></li>
+    <li><a href="#step4">第4步：验证（随机切分 vs Scaffold Split）</a></li>
+    <li><a href="#summary">完整流程代码模板</a></li>
+  </ol>
+</div>
+
+<!-- ============================================================ -->
+<h2 id="step0"><span class="step-badge">0</span>环境准备</h2>
+
+<h3>安装正确的包</h3>
+
+<p>注意：pip 上有两个不同的包都叫 "tdc"，别装错了。</p>
+
+<table>
+  <tr><th>包名</th><th>是什么</th><th>正确？</th></tr>
+  <tr><td><code>PyTDC</code></td><td>Therapeutics Data Commons（药物发现数据集）</td><td style="color:var(--good)">✓ 对的</td></tr>
+  <tr><td><code>tdc</code></td><td>聊天机器人/语音工具包</td><td style="color:var(--warn)">✗ 错的</td></tr>
+</table>
+
+<pre><code># 安装正确的
+pip install PyTDC
+
+# 如果装错了，先卸载
+pip uninstall tdc -y
+pip install PyTDC
+
+# 验证：导入不报错就是对的
+# from tdc.single_pred import ADME
+</code></pre>
+
+<div class="note">
+  <strong>为什么 pip 名和 import 名不一样？</strong><br>
+  这是 Python 生态的常见现象。<code>pip install PyTDC</code> 安装的包，导入时写 <code>from tdc import ...</code>。就像 <code>pip install scikit-learn</code> 但导入是 <code>import sklearn</code>。
+</div>
+
+<!-- ============================================================ -->
+<h2 id="step1"><span class="step-badge">1</span>数据加载与探索</h2>
+
+<h3>1.1 TDC 是什么</h3>
+
+<p>TDC（Therapeutics Data Commons）是药物发现领域的标准数据集库。它把散落在文献、数据库中的实验测量数据统一整理、清洗好了，你一行代码就能加载。</p>
+
+<p>TDC 的数据分类：</p>
+
+<table>
+  <tr><th>类别</th><th>说明</th><th>你现在用</th></tr>
+  <tr><td><code>single_pred</code></td><td>单分子性质预测（给一个分子，预测一个值）</td><td>✓</td></tr>
+  <tr><td><code>multi_pred</code></td><td>多分子相互作用（药物-靶点、药物-药物）</td><td>以后</td></tr>
+  <tr><td><code>generation</code></td><td>分子生成任务</td><td>以后</td></tr>
+</table>
+
+<p><code>single_pred</code> 下又分：</p>
+
+<table>
+  <tr><th>子类</th><th>全称</th><th>内容</th></tr>
+  <tr><td>ADME</td><td>Absorption, Distribution, Metabolism, Excretion</td><td>吸收、分布、代谢、排泄</td></tr>
+  <tr><td>Tox</td><td>Toxicity</td><td>毒性（hERG、Ames等）</td></tr>
+  <tr><td>HTS</td><td>High-Throughput Screening</td><td>高通量筛选数据</td></tr>
+</table>
+
+<h3>1.2 加载 Caco-2 数据集</h3>
+
+<p>我们用 <code>caco2_wang</code> 作为练习数据集——它测的是 Caco-2 细胞渗透性，是一个回归任务（预测连续数值）。</p>
+
+<pre><code>from tdc.single_pred import ADME
+import pandas as pd
+
+# 加载数据集（第一次会自动下载并缓存）
+data = ADME(name='caco2_wang')
+
+# 取出 DataFrame
+df = data.get_data()
+</code></pre>
+
+<div class="key-concept">
+  <div class="label">DataFrame 是什么</div>
+  pandas 的 DataFrame 就是一张表格（类似 Excel）。有行有列，每列可以是不同类型的数据。<br>
+  - <code>df.shape</code> → (行数, 列数)<br>
+  - <code>df.columns</code> → 所有列名<br>
+  - <code>df['列名']</code> → 取某一列（叫 Series）
+</div>
+
+<h3>1.3 探索数据的8个检查项</h3>
+
+<p>拿到任何新数据集，按这个顺序检查：</p>
+
+<h4>① 数据规模</h4>
+<pre><code>print(df.shape)
+# 输出类似: (907, 3)
+# 含义: 907个分子，3列
+</code></pre>
+
+<h4>② 列名</h4>
+<pre><code>print(df.columns)
+# 输出: Index(['Drug_ID', 'Drug', 'Y'], dtype='object')
+# Drug_ID: 分子编号
+# Drug:    SMILES字符串
+# Y:       标签值（渗透系数）
+</code></pre>
+
+<h4>③ 前几行预览</h4>
+<pre><code>print(df.head())
+# 看前5行数据长什么样
+</code></pre>
+
+<h4>④ 标签统计</h4>
+<pre><code>print(df['Y'].describe())
+</code></pre>
+
+<p>输出类似：</p>
+<pre><code>count    907.000000   ← 数据条数
+mean       4.xxx      ← 平均值
+std        3.xxx      ← 标准差（越大越分散）
+min        0.xxx      ← 最小值
+25%        2.xxx      ← 25%分位数
+50%        4.xxx      ← 中位数（50%分位数）
+75%        6.xxx      ← 75%分位数
+max       23.xxx      ← 最大值
+</code></pre>
+
+<div class="note">
+  <strong>怎么读 describe 的输出：</strong><br>
+  • <strong>mean ≈ 50%</strong> → 分布比较对称（接近正态）<br>
+  • <strong>mean > 50% 很多</strong> → 右偏（有少数很大的值拉高了均值）<br>
+  • <strong>max 远大于 75%</strong> → 有极端值，注意对模型的影响
+</div>
+
+<h4>⑤ 缺失值检查</h4>
+<pre><code>print(df.isnull().sum())
+# 每列有多少个缺失值
+</code></pre>
+
+<h4>⑥ 标签分布直方图</h4>
+<pre><code>import matplotlib.pyplot as plt
+
+plt.figure(figsize=(8, 4))
+plt.hist(df['Y'], bins=50, edgecolor='black', alpha=0.7)
+plt.xlabel('Caco-2 Permeability')
+plt.ylabel('Count')
+plt.title('Distribution of Caco-2 Permeability')
+plt.show()
+</code></pre>
+
+<h4>⑦ SMILES 质量检查</h4>
+<pre><code>from rdkit import Chem
+
+# 统计能解析的比例
+ok = 0
+fail = 0
+for smi in df['Drug']:
+    mol = Chem.MolFromSmiles(smi)
+    if mol is not None:
+        ok += 1
+    else:
+        fail += 1
+
+print(f'解析成功: {ok}, 失败: {fail}')
+</code></pre>
+
+<h4>⑧ 分子量分布（初步特征检查）</h4>
+<pre><code>from rdkit import Chem
+from rdkit.Chem import Descriptors
+import numpy as np
+
+mws = []
+for smi in df['Drug']:
+    mol = Chem.MolFromSmiles(smi)
+    if mol:
+        mws.append(Descriptors.MolWt(mol))
+
+mws = np.array(mws)
+print(f'MW范围: {mws.min():.1f} ~ {mws.max():.1f}')
+print(f'MW均值: {mws.mean():.1f}')
+</code></pre>
+
+<h3>1.4 Caco-2 是什么（药学背景）</h3>
+
+<div class="key-concept">
+  <div class="label">Caco-2 渗透性实验</div>
+  Caco-2 细胞来源于人结肠腺癌，在培养皿中会长成类似小肠上皮的细胞单层。<br><br>
+  实验：把药物加在细胞层一侧（AP侧），测另一侧（BL侧）的药物浓度，算出渗透系数 Papp。<br><br>
+  意义：预测口服药物的肠道吸收能力。渗透性差 = 吃了吸收不了。
+</div>
+
+<table>
+  <tr><th>Papp (cm/s)</th><th>渗透性</th><th>口服吸收预期</th></tr>
+  <tr><td>> 10×10⁻⁶</td><td>高</td><td>> 90% 吸收</td></tr>
+  <tr><td>1~10×10⁻⁶</td><td>中</td><td>中等</td></tr>
+  <tr><td>< 1×10⁻⁶</td><td>低</td><td>< 20% 吸收</td></tr>
+</table>
+
+<!-- ============================================================ -->
+<h2 id="step2"><span class="step-badge">2</span>特征工程</h2>
+
+<p>特征工程 = 把分子翻译成计算机能懂的数字向量。</p>
+
+<p>这一步是整条流水线的关键——<strong>特征决定模型性能的上限</strong>。模型再强，如果特征没包含关键信息，预测就不可能准。</p>
+
+<h3>2.1 两种特征化方式</h3>
+
+<div class="comparison">
+  <div>
+    <h4>方式A：分子描述符</h4>
+    <p>人工设计的宏观指标，每个都有明确化学含义。</p>
+    <p><strong>维度：</strong>通常7~200维</p>
+    <p><strong>优点：</strong>可解释性强，你知道每个数字代表什么</p>
+    <p><strong>缺点：</strong>信息压缩太多，丢失大量结构细节</p>
+    <p style="color:var(--text-muted);font-size:12px;margin-top:8px;">例：[345.2, 3.1, 62.5, 2, 1, 3, 0.42]</p>
+  </div>
+  <div>
+    <h4>方式B：Morgan指纹</h4>
+    <p>自动扫描分子结构片段，编码成二进制向量。</p>
+    <p><strong>维度：</strong>通常1024~2048维</p>
+    <p><strong>优点：</strong>保留更多结构信息，捕捉细节</p>
+    <p><strong>缺点：</strong>不可解释（你不知道每个bit对应什么）</p>
+    <p style="color:var(--text-muted);font-size:12px;margin-top:8px;">例：[0,1,0,0,1,0,...,0] 共2048位</p>
+  </div>
+</div>
+
+<h3>2.2 描述符计算（你已经会的）</h3>
+
+<pre><code>from rdkit import Chem
+from rdkit.Chem import Descriptors
+import numpy as np
+
+def calc_descriptors(smiles_list):
+    """计算7个常用分子描述符"""
+    features = []
+    for smi in smiles_list:
+        mol = Chem.MolFromSmiles(smi)
+        if mol is None:
+            continue
+        mw = Descriptors.MolWt(mol)
+        logp = Descriptors.MolLogP(mol)
+        hba = Descriptors.NumHAcceptors(mol)
+        hbd = Descriptors.NumHDonors(mol)
+        tpsa = Descriptors.TPSA(mol)
+        rotatable = Descriptors.NumRotatableBonds(mol)
+        fsp3 = Descriptors.FractionCSP3(mol)
+        features.append([mw, logp, hba, hbd, tpsa, rotatable, fsp3])
+    return np.array(features)
+
+# 使用
+X_desc = calc_descriptors(df['Drug'].values)
+y = df['Y'].values
+print(f'描述符矩阵形状: {X_desc.shape}')  # (907, 7)
+</code></pre>
+
+<h3>2.3 Morgan指纹计算（新知识）</h3>
+
+<h4>Morgan指纹原理</h4>
+
+<p>Morgan指纹又叫ECFP（Extended Connectivity Fingerprint，扩展连接性指纹）。它的工作方式：</p>
+
+<ol>
+  <li>以分子中每个原子为中心</li>
+  <li>看它周围 radius 层邻居的结构（radius=2 就是看2层）</li>
+  <li>每个独特的子结构对应2048个位置中的一个</li>
+  <li>有这个子结构就标1，没有就标0</li>
+</ol>
+
+<div class="note">
+  <strong>打个比方：</strong>描述符像一个人的"身高体重血压"（7个宏观指标），指纹像一张2048像素的全身照（微观细节全保留）。
+</div>
+
+<h4>代码实现</h4>
+
+<pre><code>from rdkit import Chem
+from rdkit.Chem import AllChem
+from rdkit.DataStructs import ConvertToNumpyArray
+import numpy as np
+
+def calc_morgan_fingerprint(smiles_list, radius=2, n_bits=2048):
+    """计算Morgan指纹"""
+    fps = []
+    for smi in smiles_list:
+        mol = Chem.MolFromSmiles(smi)
+        if mol is None:
+            continue
+        # 生成指纹对象
+        fp = AllChem.GetMorganFingerprintAsBitVect(mol, radius=radius, nBits=n_bits)
+        # 转成numpy数组（sklearn只能吃numpy数组）
+        fp_array = np.zeros((n_bits,), dtype=np.int8)
+        ConvertToNumpyArray(fp, fp_array)
+        fps.append(fp_array)
+    return np.array(fps)
+
+# 使用
+X_fp = calc_morgan_fingerprint(df['Drug'].values)
+print(f'指纹矩阵形状: {X_fp.shape}')  # (907, 2048)
+</code></pre>
+
+<div class="warn">
+  <strong>注意：</strong><code>GetMorganFingerprintAsBitVect</code> 返回的不是 numpy 数组，而是 RDKit 自己的 <code>ExplicitBitVect</code> 对象。必须用 <code>ConvertToNumpyArray</code> 转成 numpy 数组才能喂给 sklearn。
+</div>
+
+<h4>参数说明</h4>
+
+<table>
+  <tr><th>参数</th><th>常用值</th><th>含义</th></tr>
+  <tr><td>radius</td><td>2</td><td>以每个原子为中心看几层邻居。2=ECFP4，3=ECFP6</td></tr>
+  <tr><td>nBits</td><td>2048</td><td>指纹长度。1024或2048最常用，太长容易稀疏，太短容易碰撞</td></tr>
+</table>
+
+<h4>什么是"碰撞"？</h4>
+
+<p>2048个位置对应不了所有可能的子结构（分子子结构的种类是无限的）。多个不同子结构可能被哈希到同一个位置——这叫<strong>碰撞</strong>。nBits越大，碰撞概率越低，但向量越稀疏。2048是实践中效果和效率的平衡点。</p>
+
+<h3>2.4 检查特征的稀疏度</h3>
+
+<pre><code># 看看指纹有多稀疏
+density = X_fp.mean()  # 1的比例
+print(f'指纹密度: {density:.4f} (平均每个分子有 {density*2048:.1f} 个1)')
+# 通常只有2-3%的位置是1，剩下都是0 → 很稀疏
+</code></pre>
+
+<div class="key-concept">
+  <div class="label">稀疏数据（Sparse Data）</div>
+  大部分元素是0的向量叫稀疏向量。Morgan指纹通常只有2-3%的位置是1，就是稀疏的。<br><br>
+  <strong>对模型的影响：</strong>稀疏数据上，SVM（支持向量机）通常比RandomForest效果好。因为决策树在高维稀疏数据上容易过拟合。
+</div>
+
+<!-- ============================================================ -->
+<h2 id="step3"><span class="step-badge">3</span>多模型对比训练</h2>
+
+<p>用不同特征 + 不同模型组合，看哪种搭配效果最好。</p>
+
+<h3>3.1 三个模型对比</h3>
+
+<table>
+  <tr><th>模型</th><th>一句话原理</th><th>适合的特征</th></tr>
+  <tr>
+    <td><strong>RandomForest</strong></td>
+    <td>建200棵决策树投票，每棵树学不同的数据子集</td>
+    <td>描述符（低维、少量特征）</td>
+  </tr>
+  <tr>
+    <td><strong>SVM</strong></td>
+    <td>找一个最优超平面把数据分开（回归叫SVR）</td>
+    <td>指纹（高维、稀疏数据）</td>
+  </tr>
+  <tr>
+    <td><strong>XGBoost</strong></td>
+    <td>梯度提升，每棵新树修正上一棵树的错误</td>
+    <td>两者都行，业界比赛常用</td>
+  </tr>
+</table>
+
+<h3>3.2 回归模型代码</h3>
+
+<p>因为 caco2_wang 是回归任务（预测连续数值），所以用回归版本的模型。</p>
+
+<pre><code>from sklearn.ensemble import RandomForestRegressor
+from sklearn.svm import SVR
+from sklearn.model_selection import cross_val_score, train_test_split
+from sklearn.metrics import mean_squared_error, r2_score
+import numpy as np
+
+# ---------- 模型1：描述符 + RandomForest ----------
+model_rf_desc = RandomForestRegressor(n_estimators=200, random_state=42)
+scores_rf_desc = cross_val_score(model_rf_desc, X_desc, y, cv=5, scoring='r2')
+print(f'描述符+RF: R² = {scores_rf_desc.mean():.3f} ± {scores_rf_desc.std():.3f}')
+
+# ---------- 模型2：指纹 + SVM ----------
+from sklearn.svm import SVR
+model_svr_fp = SVR(kernel='rbf')
+scores_svr_fp = cross_val_score(model_svr_fp, X_fp, y, cv=5, scoring='r2')
+print(f'指纹+SVR: R² = {scores_svr_fp.mean():.3f} ± {scores_svr_fp.std():.3f}')
+
+# ---------- 模型3：指纹 + XGBoost ----------
+from xgboost import XGBRegressor
+model_xgb_fp = XGBRegressor(n_estimators=200, random_state=42)
+scores_xgb_fp = cross_val_score(model_xgb_fp, X_fp, y, cv=5, scoring='r2')
+print(f'指纹+XGB: R² = {scores_xgb_fp.mean():.3f} ± {scores_xgb_fp.std():.3f}')
+</code></pre>
+
+<div class="warn">
+  <strong>注意：</strong>分类任务用 <code>RandomForestClassifier</code> / <code>SVC</code> / <code>XGBClassifier</code>，评估用 accuracy。<br>
+  回归任务用 <code>RandomForestRegressor</code> / <code>SVR</code> / <code>XGBRegressor</code>，评估用 R² 或 MSE。
+</div>
+
+<h3>3.3 评估指标说明</h3>
+
+<table>
+  <tr><th>指标</th><th>含义</th><th>范围</th><th>越好</th></tr>
+  <tr><td>R²</td><td>模型解释了多少方差</td><td>负无穷 ~ 1</td><td>越大越好，1最好</td></tr>
+  <tr><td>MSE</td><td>预测值和真实值差的平方平均</td><td>0 ~ 正无穷</td><td>越小越好</td></tr>
+  <tr><td>RMSE</td><td>MSE开根号，和Y同单位</td><td>0 ~ 正无穷</td><td>越小越好</td></tr>
+</table>
+
+<div class="note">
+  <strong>R² 为负数是什么意思？</strong><br>
+  R² 可以是负数。这说明模型还不如"直接猜均值"的效果。出现负的 R² 通常意味着：<br>
+  1. 特征和标签几乎没关系<br>
+  2. 模型超参数设得不好<br>
+  3. 数据量太少
+</div>
+
+<h3>3.4 测试集验证</h3>
+
+<p>交叉验证是在训练数据上做的。最后要在完全没见过的测试集上跑一遍，确认泛化能力。</p>
+
+<pre><code># 切分训练集和测试集
+X_train, X_test, y_train, y_test = train_test_split(
+    X_fp, y, test_size=0.2, random_state=42
+)
+
+# 训练
+model = SVR(kernel='rbf')
+model.fit(X_train, y_train)
+
+# 预测
+y_pred = model.predict(X_test)
+
+# 评估
+mse = mean_squared_error(y_test, y_pred)
+r2 = r2_score(y_test, y_pred)
+print(f'测试集 MSE: {mse:.3f}')
+print(f'测试集 R²:  {r2:.3f}')
+</code></pre>
+
+<!-- ============================================================ -->
+<h2 id="step4"><span class="step-badge">4</span>验证方式</h2>
+
+<h3>4.1 随机切分的问题</h3>
+
+<p><code>train_test_split</code> 是随机切分的。但药物分子经常有相似的骨架（scaffold）——随机切分时，训练集和测试集可能含有结构极其相似的分子。</p>
+
+<p>结果就是：模型只要"记住"了骨架就能答对测试集，<strong>分数虚高</strong>。</p>
+
+<div class="comparison">
+  <div>
+    <h4>随机切分 Random Split</h4>
+    <p>训练集和测试集可能有相同骨架</p>
+    <p style="color:var(--warn);">分数虚高</p>
+    <p style="color:var(--text-muted);font-size:12px;">模拟场景：给你一个类似的分子，你能不能预测</p>
+  </div>
+  <div>
+    <h4>骨架切分 Scaffold Split</h4>
+    <p>训练集和测试集的骨架不重叠</p>
+    <p style="color:var(--good);">更真实</p>
+    <p style="color:var(--text-muted);font-size:12px;">模拟场景：给你一个全新骨架类型的分子，你能不能预测</p>
+  </div>
+</div>
+
+<h3>4.2 Murcko骨架是什么</h3>
+
+<p>Murcko骨架 = 把分子的侧链都去掉，剩下的核心环系结构。</p>
+
+<p>举个例子（概念示意）：</p>
+
+<pre><code>分子A: 苯环-OH-O-CH2-CH3   → 骨架: 苯环
+分子B: 苯环-NH2             → 骨架: 苯环
+分子C: 萘环-COOH            → 骨架: 萘环
+</code></pre>
+
+<p>分子A和B骨架相同，C不同。scaffold split会把A和B都放训练集（或都放测试集），不会分开。</p>
+
+<h3>4.3 Scaffold Split 代码实现</h3>
+
+<p>RDKit 可以提取 Murcko 骨架：</p>
+
+<pre><code>from rdkit import Chem
+from rdkit.Chem.Scaffolds import MurckoScaffold
+import numpy as np
+
+def get_murcko_scaffold(smi):
+    """获取分子的Murcko骨架SMILES"""
+    mol = Chem.MolFromSmiles(smi)
+    if mol is None:
+        return None
+    scaffold = MurckoScaffold.MurckoScaffoldSmiles(mol=mol)
+    return scaffold
+
+# 计算所有分子的骨架
+scaffolds = [get_murcko_scaffold(smi) for smi in df['Drug']]
+print(f'唯一骨架数量: {len(set(scaffolds))}')
+</code></pre>
+
+<p>按骨架分组切分：</p>
+
+<pre><code>def scaffold_split(smiles_list, y, test_size=0.2, seed=42):
+    """按骨架切分数据集"""
+    # 1. 给每个分子算骨架
+    scaffolds = {}
+    for i, smi in enumerate(smiles_list):
+        mol = Chem.MolFromSmiles(smi)
+        if mol is None:
+            continue
+        scaffold = MurckoScaffold.MurckoScaffoldSmiles(mol=mol)
+        if scaffold not in scaffolds:
+            scaffolds[scaffold] = []
+        scaffolds[scaffold].append(i)
+    
+    # 2. 按骨架的分子数量从多到少排序
+    scaffold_list = sorted(scaffolds.values(), key=len, reverse=True)
+    
+    # 3. 依次分配骨架，直到测试集达到目标大小
+    n_total = len(smiles_list)
+    n_test_target = int(n_total * test_size)
+    
+    train_idx = []
+    test_idx = []
+    np.random.seed(seed)
+    
+    # 打乱骨架顺序（避免大骨架都在一边）
+    np.random.shuffle(scaffold_list)
+    
+    for scaffold_indices in scaffold_list:
+        if len(test_idx) < n_test_target:
+            test_idx.extend(scaffold_indices)
+        else:
+            train_idx.extend(scaffold_indices)
+    
+    return np.array(train_idx), np.array(test_idx)
+
+# 使用
+train_idx, test_idx = scaffold_split(df['Drug'].values, y, test_size=0.2)
+
+X_train = X_fp[train_idx]
+X_test = X_fp[test_idx]
+y_train = y[train_idx]
+y_test = y[test_idx]
+
+print(f'训练集: {len(train_idx)}, 测试集: {len(test_idx)}')
+</code></pre>
+
+<h3>4.4 两种切分方式对比</h3>
+
+<p>对比实验：同一个模型（指纹+SVR），分别用随机切分和骨架切分训练，看测试集R²的差距。</p>
+
+<pre><code># 随机切分
+X_tr_rand, X_te_rand, y_tr_rand, y_te_rand = train_test_split(
+    X_fp, y, test_size=0.2, random_state=42
+)
+model_rand = SVR(kernel='rbf')
+model_rand.fit(X_tr_rand, y_tr_rand)
+r2_rand = r2_score(y_te_rand, model_rand.predict(X_te_rand))
+print(f'随机切分 R²: {r2_rand:.3f}')
+
+# 骨架切分
+model_scaf = SVR(kernel='rbf')
+model_scaf.fit(X_fp[train_idx], y[train_idx])
+r2_scaf = r2_score(y[test_idx], model_scaf.predict(X_fp[test_idx]))
+print(f'骨架切分 R²: {r2_scaf:.3f}')
+
+print(f'下降幅度: {(r2_rand - r2_scaf):.3f}')
+</code></pre>
+
+<div class="key-concept">
+  <div class="label">为什么 scaffold split 分数一定更低？</div>
+  因为任务变难了——模型需要泛化到从未见过的骨架类型。<br><br>
+  随机切分更像"做过的题换个数字"，骨架切分更像"全新题型"。<br><br>
+  真实药物研发中，你遇到的新分子骨架往往和训练数据不同，所以 scaffold split 的分数更接近真实表现。
+</div>
+
+<!-- ============================================================ -->
+<h2 id="summary">完整流程代码模板</h2>
+
+<p>以下是从数据到验证的完整流程。你可以把这个当参考，自己一步步实现，每一步都确认跑通了再进下一步。</p>
+
+<pre><code># ============================================================
+# TDC Caco-2 渗透性预测 完整流程
+# ============================================================
+
+# ---- 第1步：加载数据 ----
+from tdc.single_pred import ADME
+data = ADME(name='caco2_wang')
+df = data.get_data()
+print(f'数据量: {df.shape}')
+
+# ---- 第2步：计算两种特征 ----
+from rdkit import Chem
+from rdkit.Chem import Descriptors, AllChem
+from rdkit.DataStructs import ConvertToNumpyArray
+import numpy as np
+
+# 描述符
+def calc_descriptors(smiles_list):
+    features = []
+    for smi in smiles_list:
+        mol = Chem.MolFromSmiles(smi)
+        if mol is None: continue
+        features.append([
+            Descriptors.MolWt(mol),
+            Descriptors.MolLogP(mol),
+            Descriptors.NumHAcceptors(mol),
+            Descriptors.NumHDonors(mol),
+            Descriptors.TPSA(mol),
+            Descriptors.NumRotatableBonds(mol),
+            Descriptors.FractionCSP3(mol),
+        ])
+    return np.array(features)
+
+# Morgan指纹
+def calc_morgan_fp(smiles_list, n_bits=2048):
+    fps = []
+    for smi in smiles_list:
+        mol = Chem.MolFromSmiles(smi)
+        if mol is None: continue
+        fp = AllChem.GetMorganFingerprintAsBitVect(mol, radius=2, nBits=n_bits)
+        arr = np.zeros((n_bits,), dtype=np.int8)
+        ConvertToNumpyArray(fp, arr)
+        fps.append(arr)
+    return np.array(fps)
+
+X_desc = calc_descriptors(df['Drug'].values)
+X_fp = calc_morgan_fp(df['Drug'].values)
+y = df['Y'].values
+
+print(f'描述符矩阵: {X_desc.shape}')
+print(f'指纹矩阵: {X_fp.shape}')
+
+# ---- 第3步：多模型交叉验证对比 ----
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.svm import SVR
+from sklearn.model_selection import cross_val_score
+
+models = {
+    '描述符+RF': (RandomForestRegressor(n_estimators=200, random_state=42), X_desc),
+    '指纹+SVR': (SVR(kernel='rbf'), X_fp),
+    '描述符+SVR': (SVR(kernel='rbf'), X_desc),
+    '指纹+RF': (RandomForestRegressor(n_estimators=200, random_state=42), X_fp),
+}
+
+for name, (model, X) in models.items():
+    scores = cross_val_score(model, X, y, cv=5, scoring='r2')
+    print(f'{name:12s} R² = {scores.mean():.3f} ± {scores.std():.3f}')
+
+# ---- 第4步：scaffold split验证 ----
+from rdkit.Chem.Scaffolds import MurckoScaffold
+from sklearn.metrics import r2_score
+
+def scaffold_split(smiles_list, test_size=0.2, seed=42):
+    scaffolds = {}
+    for i, smi in enumerate(smiles_list):
+        mol = Chem.MolFromSmiles(smi)
+        if mol is None: continue
+        scf = MurckoScaffold.MurckoScaffoldSmiles(mol=mol)
+        if scf not in scaffolds:
+            scaffolds[scf] = []
+        scaffolds[scf].append(i)
+    
+    scaffold_list = sorted(scaffolds.values(), key=len, reverse=True)
+    np.random.seed(seed)
+    np.random.shuffle(scaffold_list)
+    
+    n_test_target = int(len(smiles_list) * test_size)
+    train_idx, test_idx = [], []
+    for indices in scaffold_list:
+        if len(test_idx) < n_test_target:
+            test_idx.extend(indices)
+        else:
+            train_idx.extend(indices)
+    return np.array(train_idx), np.array(test_idx)
+
+train_idx, test_idx = scaffold_split(df['Drug'].values, test_size=0.2)
+
+# 用效果最好的那个模型做测试集评估
+best_model = SVR(kernel='rbf')
+best_model.fit(X_fp[train_idx], y[train_idx])
+y_pred = best_model.predict(X_fp[test_idx])
+print(f'\nScaffold Split 测试集 R²: {r2_score(y[test_idx], y_pred):.3f}')
+</code></pre>
+
+<div class="good">
+  <strong>练习建议：</strong><br>
+  1. 不要直接复制粘贴，自己一行一行写<br>
+  2. 每写完一步就运行一次，确认输出符合预期<br>
+  3. 遇到报错先自己读错误信息，想5分钟再问<br>
+  4. 最后画个对比柱状图：4个模型的交叉验证R²，一目了然
+</div>
+
+<div style="height: 40px;"></div>
+
+</body>
+</html>
