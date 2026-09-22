@@ -12,7 +12,7 @@ DESCRIPTOR_NAMES = [
 
 def calc_descriptors(smiles_list):
     """计算7个基础分子描述符"""
-    DESCRIPTOR_NAMES = ['MolWt', 'MolLogP', 'NumHAcceptors','NumHDonors', 'TPSA', 'NumRotatableBonds', 'FractionCSP3',]
+    DESCRIPTOR_NAMES = ['MolWt', 'MolLogP', 'NumHAcceptors','NumHDonors', 'TPSA', 'NumRotatableBonds', 'FractionCSP3']
     features = []
     valid_smiles = []
     for smi in smiles_list():
