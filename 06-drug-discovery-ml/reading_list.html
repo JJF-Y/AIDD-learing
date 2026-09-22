@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AIDD 论文阅读清单</title>
+<style>
+  :root {
+    --bg: #101011;
+    --surface: #1a1a1c;
+    --text: #e0e0e0;
+    --text-muted: #8a8a8e;
+    --accent: #c9b896;
+    --border: rgba(255,255,255,0.08);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, "PingFang SC", "Segoe UI", system-ui, sans-serif;
+    line-height: 1.6;
+    padding: 20px 16px 40px;
+    max-width: 640px;
+    margin: 0 auto;
+  }
+  h1 {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .subtitle {
+    color: var(--text-muted);
+    font-size: 13px;
+    margin-bottom: 24px;
+  }
+  .step {
+    margin-bottom: 28px;
+  }
+  .step-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--accent);
+    margin-bottom: 12px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--border);
+  }
+  .paper {
+    background: var(--surface);
+    border-radius: 10px;
+    padding: 16px;
+    margin-bottom: 12px;
+  }
+  .paper-title {
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 1.4;
+    margin-bottom: 6px;
+  }
+  .paper-meta {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+  }
+  .paper-desc {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.5;
+    margin-bottom: 10px;
+  }
+  .paper-link {
+    display: inline-block;
+    font-size: 13px;
+    color: var(--accent);
+    text-decoration: none;
+    border: 1px solid var(--border);
+    padding: 5px 12px;
+    border-radius: 6px;
+  }
+  .paper-link:active {
+    background: rgba(201,184,150,0.1);
+  }
+  .tag {
+    display: inline-block;
+    font-size: 11px;
+    color: var(--text-muted);
+    background: rgba(255,255,255,0.05);
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-right: 6px;
+  }
+  .order {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 20px;
+    padding: 14px;
+    background: var(--surface);
+    border-radius: 10px;
+    line-height: 1.7;
+  }
+</style>
+</head>
+<body>
+
+<h1>AIDD 论文阅读清单</h1>
+<p class="subtitle">按流水线步骤分类，手机点击链接直接阅读</p>
+
+<div class="step">
+  <div class="step-title">第1-2步：数据 + 分子表示</div>
+
+  <div class="paper">
+    <div class="paper-title">A review on machine learning approaches and trends in drug discovery</div>
+    <div class="paper-meta">Carracedo-Reboredo 等 · 2021 · Computational and Structural Biotechnology Journal</div>
+    <div class="paper-desc">全流程概览，章节结构和你的4步练习一一对应。从描述符到指纹、从传统ML到深度学习，覆盖Lipinski规则和ADMET预测。</div>
+    <span class="tag">先读这篇</span>
+    <span class="tag">难度: 中</span>
+    <br><br>
+    <a class="paper-link" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC8387781/">PMC 全文</a>
+  </div>
+
+  <div class="paper">
+    <div class="paper-title">Are 2D fingerprints still valuable for drug discovery?</div>
+    <div class="paper-meta">2019 · arXiv</div>
+    <div class="paper-desc">直接回答"指纹好还是描述符好"。系统比较多种2D指纹（含Morgan/ECFP）在毒性和活性预测上的表现。对应你的对比实验。</div>
+    <span class="tag">第2步核心</span>
+    <span class="tag">难度: 中</span>
+    <br><br>
+    <a class="paper-link" href="https://arxiv.org/html/1911.00930v1">arXiv 全文</a>
+  </div>
+
+  <div class="paper">
+    <div class="paper-title">Artificial intelligence in drug discovery from advanced molecular representation to pipeline applications</div>
+    <div class="paper-meta">Zhou & Tao · 2026 · Frontiers in Bioinformatics</div>
+    <div class="paper-desc">最新综述，覆盖面最广。第2节"Molecular representation"直接对应你的特征工程。从SMILES到SELFIES到GNN到3D几何深度学习，完整进化路线。当参考手册按需查阅。</div>
+    <span class="tag">最全最新</span>
+    <span class="tag">难度: 高</span>
+    <br><br>
+    <a class="paper-link" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC13096036/">PMC 全文</a>
+  </div>
+</div>
+
+<div class="step">
+  <div class="step-title">第3步：模型选择</div>
+
+  <div class="paper">
+    <div class="paper-title">Descriptor-based Foundation Models for Molecular Property Prediction</div>
+    <div class="paper-meta">2025 · arXiv</div>
+    <div class="paper-desc">引入CheMeleon模型，用DMPNN从描述符预训练。帮助理解"描述符和图神经网络的结合"方向，了解模型前沿趋势。</div>
+    <span class="tag">参考</span>
+    <span class="tag">难度: 中高</span>
+    <br><br>
+    <a class="paper-link" href="https://arxiv.org/html/2506.15792v1">arXiv 全文</a>
+  </div>
+</div>
+
+<div class="step">
+  <div class="step-title">第4步：验证方式</div>
+
+  <div class="paper">
+    <div class="paper-title">Beyond Scaffold Splits: Structural-Frontier Evaluation Reveals Hidden Failures in ADMET Models</div>
+    <div class="paper-meta">2025 · arXiv</div>
+    <div class="paper-desc">指出scaffold split仍会高估性能，提出更严格的评估方法。实测案例：随机切分R²=0.85，scaffold split降到0.61。正好对应你即将验证的现象。</div>
+    <span class="tag">第4步核心</span>
+    <span class="tag">难度: 高</span>
+    <br><br>
+    <a class="paper-link" href="https://arxiv.org/html/2607.10729v2">arXiv 全文</a>
+  </div>
+</div>
+
+<div class="order">
+  <strong>建议阅读顺序</strong><br>
+  1. Carracedo 2021 → 全流程概览，和你的练习对应<br>
+  2. 2D Fingerprints 2019 → 特征工程对比实验<br>
+  3. Beyond Scaffold 2025 → 验证方式<br>
+  4. Zhou 2026 → 按需查阅前沿方向
+</div>
+
+</body>
+</html>
