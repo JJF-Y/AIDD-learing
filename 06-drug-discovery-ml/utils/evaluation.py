@@ -11,9 +11,9 @@ def evaluate_regression(y_true, y_pred, verbose= True):
    mae = mean_absolute_error(y_true, y_pred)
 
    if verbose:
-      print ( f"MSE: {mse: .3 f} " ) 
-      print ( f"RMSE: {rmse: .3 f} " ) 
-      print ( f"MAE: {mae: .3 f} " ) 
-      print ( f"R²: {r2: .3 f} " )
+      print(f"MSE:  {mse:.3f}")
+      print(f"RMSE: {rmse:.3f}")
+      print(f"MAE:  {mae:.3f}")
+      print(f"R²:   {r2:.3f}")
 
    return {'mse' : mse, 'rmse' : rmse, 'r2' : r2, 'mae' : mae }
