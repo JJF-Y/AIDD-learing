@@ -23,17 +23,23 @@ from evaluation import evaluate_regression
 
 
 # ===================== 第1步：加载数据 =====================
+#=*50只是为了好看
 print('=' * 50)
 print('第1步：加载数据')
 print('=' * 50)
 
+#df是数据列表
 df = load_data('caco2_wang.csv')
+#这一步是为了将df.columns转变为普通列表，目的就是为了是看着干净清爽些
 print(f'列名: {df.columns.tolist()}')
 
 # 提取 SMILES 和标签（假设标签列叫 'Y'）
+#df.columns可以判断某列是否存在，存在True，不存在False，下列的代码的作用是判断有没有Drug这列有就用没有就用SMILES列
 smiles_list = df['Drug'].tolist() if 'Drug' in df.columns else df['SMILES'].tolist()
+#将“Y”这列转成numpy 数组
 y = df['Y'].values
 
+#这一步的目的是可以先简单的看看数据范围，心里有个数
 print(f'分子数: {len(smiles_list)}')
 print(f'标签范围: {y.min():.2f} ~ {y.max():.2f}')
 print(f'标签均值: {y.mean():.2f}')
@@ -44,6 +50,7 @@ print('\n' + '=' * 50)
 print('第2步：计算 Morgan 指纹')
 print('=' * 50)
 
+#调用自己写的函数
 X, valid_smiles = calc_morgan_fp(smiles_list, radius=2, n_bits=2048)
 
 # 指纹对应的标签也要同步（有些SMILES可能解析失败被跳过了）
@@ -51,6 +58,7 @@ X, valid_smiles = calc_morgan_fp(smiles_list, radius=2, n_bits=2048)
 # 如果有失败的，需要重新对齐，这里先不考虑
 print(f'指纹矩阵形状: {X.shape}')
 print(f'指纹数据类型: {X.dtype}')
+#axis对应沿着哪个方向压缩
 print(f'每个分子平均有 {X.sum(axis=1).mean():.0f} 个1')
 
 
@@ -80,14 +88,16 @@ X_train_part, X_val, y_train_part, y_val = train_test_split(
 print(f'实际训练: {X_train_part.shape[0]} 个')
 print(f'验证集(早停用): {X_val.shape[0]} 个')
 
+#参数多换行写，每个参数占一行，更清晰，)单独占一行
 xgb_model = XGBRegressor(
-    n_estimators=1000,        # 最多1000棵树（早停会提前停）
-    learning_rate=0.05,       # 学习率，小步走
-    max_depth=6,              # 每棵树最大深度
-    subsample=0.8,            # 每棵树随机用80%的样本
-    colsample_bytree=0.8,     # 每棵树随机用80%的特征
+    n_estimators=1000,           # 最多1000棵树（早停会提前停）
+    learning_rate=0.05,          # 学习率，小步走
+    max_depth=6,                 # 每棵树最大深度
+    subsample=0.8,               # 每棵树随机用80%的样本
+    colsample_bytree=0.8,        # 每棵树随机用80%的特征
+    early_stopping_rounds=50,    # 验证集连续50轮没提升就停
     random_state=42,
-    n_jobs=-1,                # 用所有CPU核
+    n_jobs=-1,                   # 用所有CPU核
 )
 
 # 训练 + 早停
@@ -97,7 +107,11 @@ xgb_model.fit(
     verbose=50,                  # 每50轮打印一次
 )
 
-print(f'\n实际用了 {xgb_model.best_iteration} 棵树（早停）')
+# 早停才会有 best_iteration，没有就用全部
+if hasattr(xgb_model, 'best_iteration') and xgb_model.best_iteration is not None:
+    print(f'\n实际用了 {xgb_model.best_iteration} 棵树（早停）')
+else:
+    print(f'\n用完了全部 {xgb_model.n_estimators} 棵树（未触发早停）')
 
 
 # ===================== 第5步：训练 RandomForest 做对比 =====================
