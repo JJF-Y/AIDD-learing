@@ -76,6 +76,35 @@
 | overfitting | 过拟合 | 模型死记硬背，泛化差 |
 | importance | 重要性 | 特征对模型的贡献 |
 | estimator | 估计器 | sklearn 里模型的统称 |
+| verbose | 啰嗦的/详细的 | 控制是否打印详细信息 |
+| metric | 指标/度量 | 评估模型好坏的标准 |
+| baseline | 基线/基准 | 基础对比模型 |
+| hyperparameter | 超参数 | 训练前设定的参数（如学习率） |
+| convergence | 收敛 | 训练到稳定不再提升 |
+| regression | 回归 | 预测连续值 |
+| classification | 分类 | 预测类别 |
+
+## 树模型 / 集成学习
+
+| 英文 | 中文 | 说明 |
+|---|---|---|
+| ensemble | 集成 | 多个模型组合 |
+| boosting | 提升 | 串行逐步修正的集成方法 |
+| bagging | 装袋 | 并行投票的集成方法 |
+| estimator | 估计器 | 单个模型/树 |
+| depth | 深度 | 树的层数 |
+| leaf | 叶子 | 树的末端节点 |
+| split | 分裂 | 树节点往下分支 |
+| gain | 增益 | 分裂带来的提升 |
+| subsample | 子采样 | 每棵树随机抽部分样本 |
+| colsample | 列采样 | 每棵树随机抽部分特征（col=列=特征） |
+| min_child_weight | 叶子最小权重 | 叶子节点至少需要多少样本 |
+| regularization | 正则化 | 惩罚复杂模型，防过拟合 |
+| early stopping | 早停 | 连续没提升就停止训练 |
+| fingerprint | 指纹 | 分子的0/1向量表示 |
+| radius | 半径 | 指纹看几层原子邻居 |
+| bit | 位 | 二进制位（0或1） |
+| hashing | 哈希 | 把任意数据映射到固定范围 |
 
 ## 工程
 

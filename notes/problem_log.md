@@ -42,5 +42,23 @@
 然后为了避免因网络波动或者别的偶发性的原因导致的药物查询失败，所以补充学习了相关的代码模块，解决方法，三个方法，综合来看第三种最合适，适用性高，内置于封装函数中，减少手动代码补充
 详见ml-basics-learning.ipynb文件
 
+---
+
+2026.9.28
+
+1. f-string 格式符空格报错（`ValueError: Invalid format specifier ' .3 f'`）
+   - 原因：`.3f` 中间加了空格，格式符必须连在一起
+   - 解决：`{mse: .3 f}` → `{mse:.3f}`
+
+2. `best_iteration` 报错（`AttributeError`）
+   - 原因：没有设 early_stopping_rounds，模型没有 best_iteration 属性
+   - 解决：加上 early_stopping_rounds 参数；或者用 hasattr 先判断再访问
+
+3. `hasattr` + `is not None` 两层判断模式
+   - 场景：不确定对象有没有某个属性，或者属性可能为空
+   - 解决：先 hasattr 检查属性存在，再检查值不是 None
+
+---
+
 2026.9.12
 继续延续昨天的接着做，先写了
