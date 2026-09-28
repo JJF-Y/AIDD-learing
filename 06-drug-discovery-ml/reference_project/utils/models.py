@@ -8,6 +8,7 @@ from sklearn.model_selection import cross_val_score
 
 
 def train_regression_model(X_train, y_train, model_type='rf', **kwargs):
+#model_type模型类型，
     if model_type == 'rf':
         n_est = kwargs.get('n_estimators', 200)
         rs = kwargs.get('random_state', 42)
@@ -16,6 +17,7 @@ def train_regression_model(X_train, y_train, model_type='rf', **kwargs):
         kernel = kwargs.get('kernel', 'rbf')
         model = SVR(kernel=kernel)
     elif model_type == 'xgb':
+        #尝试，目的是检查是否有XGBRegressor，没有的话避免运行这部分导致程序报错
         try:
             from xgboost import XGBRegressor
             rs = kwargs.get('random_state', 42)
