@@ -109,6 +109,7 @@ xgb_model.fit(
 
 # 早停才会有 best_iteration，没有就用全部
 if hasattr(xgb_model, 'best_iteration') and xgb_model.best_iteration is not None:
+#hasattr检查有没有，这里的作用是检查xgb_model有没有'best_iteration'这个属性，而后面的部分是因为可能设置了早停但是没触发就会得到None这个结果
     print(f'\n实际用了 {xgb_model.best_iteration} 棵树（早停）')
 else:
     print(f'\n用完了全部 {xgb_model.n_estimators} 棵树（未触发早停）')
