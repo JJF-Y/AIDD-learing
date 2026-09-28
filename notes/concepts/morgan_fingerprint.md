@@ -193,5 +193,6 @@ Morgan 指纹就像把分子拆成一堆乐高积木，然后回答一个问卷�
 
 ## 相关概念
 
+- [骨架划分](scaffold_decomposition.md) — 都是分子表示方法，指纹看局部细节，骨架看整体结构
 - [XGBoost 参数详解](xgb_parameters.md) — 指纹常作为 XGBoost 的输入特征，高维稀疏数据下调参有讲究
 - [早停机制](early_stopping.md) — 用指纹训练 XGBoost 时，早停是常用的防过拟合手段

@@ -11,9 +11,13 @@ graph TD
     %% 分子表示
     A[分子表示] --> B[理化描述符<br>MW、LogP、HBA 等]
     A --> C[Morgan 指纹<br>morgan_fingerprint]
+    A --> J[骨架划分<br>scaffold_decomposition]
     C --> C1[radius 半径]
     C --> C2[n_bits 位数]
     C --> C3[ConvertToNumpyArray]
+    J --> J1[Bemis-Murcko]
+    J --> J2[骨架跃迁]
+    J --> J3[骨架拆分验证]
 
     %% 模型
     D[机器学习模型] --> E[RandomForest]
@@ -42,6 +46,7 @@ graph TD
     F1 -.-> F2
     F6 -.-> H3
     C3 -.-> F
+    J3 -.-> H
 
     style A fill:#f9f,stroke:#333
     style D fill:#9f9,stroke:#333
@@ -60,6 +65,7 @@ graph TD
 | 概念 | 一句话 |
 |------|--------|
 | [Morgan 分子指纹](morgan_fingerprint.md) | 把分子结构编码成 0/1 数组，用于机器学习 |
+| [骨架划分](scaffold_decomposition.md) | 提取分子的核心骨架结构，用于 SAR 分析和骨架跃迁 |
 
 ### 模型与调参
 
