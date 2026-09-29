@@ -10,9 +10,10 @@
 import pandas as pd
 import os
 from rdkit import Chem
-from rdkit.Chem.MolStandardize import rdMolStandardize
+from rdkit.Chem.MolStandardize import rdMolStandardize  #RDKit 的分子标准化工具，最重要的
 
 # 文件路径
+#__file__当前脚本文件的路径，os.path.abspath(__file__)转成绝对路径
 script_dir = os.path.dirname(os.path.abspath(__file__))
 input_path = os.path.join(script_dir, '..', 'data', 'egfr_raw.csv')
 output_path = os.path.join(script_dir, '..', 'data', 'egfr_clean.csv')
@@ -20,9 +21,10 @@ output_path = os.path.join(script_dir, '..', 'data', 'egfr_clean.csv')
 # 活性阈值：pChEMBL >= 6.5 算活性（对应 IC50 <= 1 uM）
 ACTIVE_THRESHOLD = 6.5
 
-
+#SMILES标准化函数
 def standardize_smiles(smiles):
     """SMILES 标准化：统一形式"""
+    #pd.isna()用来判断一个值是不是空的(NaN、NaT、None 都算)
     if pd.isna(smiles):
         return None
     try:
@@ -30,14 +32,18 @@ def standardize_smiles(smiles):
         if mol is None:
             return None
         # 标准化（去质子、电荷中和等）
-        normalizer = rdMolStandardize.Normalizer()
+        #第一步归一化，处理电荷,官能团的表达方式，统一成一种写法
+        normalizer = rdMolStandardize.Normalizer()  #创建一个 Normalizer 对象。用它来处理分子
         mol = normalizer.normalize(mol)
-        # 去质子化（取最大的片段）
+        # 去盐（取最大的片段）
+        #创建一个 LargestFragmentChooser 对象（最大片段选择器）
         lfc = rdMolStandardize.LargestFragmentChooser()
+        #.choose(mol)从分子中选出最大的那个片段，返回新的 Mol 对象。
         mol = lfc.choose(mol)
         # 统一互变异构形式
         te = rdMolStandardize.TautomerEnumerator()
         mol = te.Canonicalize(mol)
+        #输出是标准化后的SMILES,或者None
         return Chem.MolToSmiles(mol)
     except Exception:
         return None
