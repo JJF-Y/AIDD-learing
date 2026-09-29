@@ -119,5 +119,6 @@ Bemis-Murcko 骨架：
 
 ## 相关概念
 
+- [数据清洗](data_cleaning.md) — 骨架分析的前提是数据干净，去重和标准化必不可少
 - [Morgan 分子指纹](morgan_fingerprint.md) — 都是分子表示方法，指纹细（看局部），骨架粗（看整体）
 - [XGBoost 参数详解](xgb_parameters.md) — 骨架拆分验证是评估模型泛化能力的严格方法

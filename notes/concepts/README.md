@@ -8,6 +8,13 @@
 
 ```mermaid
 graph TD
+    %% 数据准备
+    K[数据准备] --> K1[数据清洗<br>data_cleaning]
+    K1 --> K2[去掉缺失值]
+    K1 --> K3[SMILES 标准化]
+    K1 --> K4[去重取平均]
+    K1 --> K5[定义活性标签]
+
     %% 分子表示
     A[分子表示] --> B[理化描述符<br>MW、LogP、HBA 等]
     A --> C[Morgan 指纹<br>morgan_fingerprint]
@@ -43,22 +50,30 @@ graph TD
     I --> F5
 
     %% 关系连线
+    K1 -.-> A
     F1 -.-> F2
     F6 -.-> H3
     C3 -.-> F
     J3 -.-> H
 
+    style K fill:#9cf,stroke:#333
     style A fill:#f9f,stroke:#333
     style D fill:#9f9,stroke:#333
     style H fill:#ff9,stroke:#333
     style I fill:#f99,stroke:#333
 ```
 
-> 粉色：分子表示 | 绿色：模型 | 黄色：评估 | 红色：核心问题
+> 蓝色：数据准备 | 粉色：分子表示 | 绿色：模型 | 黄色：评估 | 红色：核心问题
 
 ---
 
 ## 按主题分类
+
+### 数据准备
+
+| 概念 | 一句话 |
+|------|--------|
+| [数据清洗](data_cleaning.md) | 把"脏数据"收拾干净：去缺失、标准化、去重、定义标签 |
 
 ### 分子表示
 
@@ -81,11 +96,11 @@ graph TD
 按从基础到进阶的顺序：
 
 ```
-分子描述符 → Morgan 指纹
-                ↓
-          机器学习基础 → 交叉验证
-                ↓
-          XGBoost 参数 → 早停机制
+数据清洗 → 分子描述符 → Morgan 指纹
+                            ↓
+                      机器学习基础 → 交叉验证
+                            ↓
+                      XGBoost 参数 → 早停机制
 ```
 
 ---
