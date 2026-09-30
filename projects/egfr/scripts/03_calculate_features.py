@@ -45,21 +45,47 @@ def main():
     print(f'描述符维度：{X_desc.shape[1]} 维')
     print(f'成功计算：{len(valid_smiles_desc)} 个分子')
 
-    # 3. 计算 Morgan 指纹
+    # 2.5 过滤异常值（去掉明显不是小分子的极端分子）
+    print(f'\n正在过滤异常值...')
+    # 建立描述符 DataFrame 方便筛选
+    df_desc_raw = pd.DataFrame(X_desc, columns=desc_names)
+    df_desc_raw.insert(0, 'smiles', valid_smiles_desc)
+
+    # 过滤条件：针对 EGFR 小分子抑制剂的合理范围
+    filter_mask = (
+        (df_desc_raw['MolWt'] < 1000) &        # 分子量小于 1000（排除多肽/大环等）
+        (df_desc_raw['NumRotatableBonds'] < 20) # 可旋转键少于 20（排除长链分子）
+    )
+
+    n_before = len(df_desc_raw)
+    df_desc_filtered = df_desc_raw[filter_mask].reset_index(drop=True)
+    n_after = len(df_desc_filtered)
+    n_removed = n_before - n_after
+
+    print(f'过滤前：{n_before} 个分子')
+    print(f'过滤掉：{n_removed} 个分子（{n_removed/n_before*100:.1f}%）')
+    print(f'过滤条件：MolWt < 1000 且 NumRotatableBonds < 20')
+
+    # 更新描述符矩阵和 SMILES 列表
+    X_desc = df_desc_filtered[desc_names].values
+    filtered_smiles = df_desc_filtered['smiles'].tolist()
+
+    # 3. 计算 Morgan 指纹（只算过滤后的分子，省时间）
     print(f'\n正在计算 Morgan 指纹 (radius=2, n_bits=2048)...')
-    X_fp, valid_smiles_fp = calc_morgan_fp(smiles_list, radius=2, n_bits=2048)
+    X_fp, valid_smiles_fp = calc_morgan_fp(filtered_smiles, radius=2, n_bits=2048)
     print(f'指纹维度：{X_fp.shape[1]} 维')
     print(f'成功计算：{len(valid_smiles_fp)} 个分子')
 
     # 4. 对齐：确保描述符和指纹的分子顺序一致
-    # （两套特征都用相同的 SMILES 列表，顺序应该是一致的）
-    assert len(valid_smiles_desc) == len(valid_smiles_fp), \
-        f'描述符和指纹的有效分子数不一致：{len(valid_smiles_desc)} vs {len(valid_smiles_fp)}'
+    # （两套特征都用 filtered_smiles，顺序应该一致，这里做一下检查）
+    assert len(valid_smiles_fp) == len(filtered_smiles), \
+        f'指纹计算失败：预期 {len(filtered_smiles)} 个，实际 {len(valid_smiles_fp)} 个'
 
-    # 取出对齐后的标签（用描述符那边的 valid_smiles 做基准）
-    valid_indices = [i for i, smi in enumerate(smiles_list) if smi in set(valid_smiles_desc)]
-    y = labels[valid_indices]
-    valid_smiles_arr = np.array(valid_smiles_desc)
+    # 从原始标签中取出过滤后分子对应的标签
+    # 建立 SMILES → label 的映射
+    smiles_to_label = dict(zip(smiles_list, labels))
+    y = np.array([smiles_to_label[smi] for smi in filtered_smiles])
+    valid_smiles_arr = np.array(filtered_smiles)
 
     print(f'\n最终有效分子：{len(y)} 个')
     print(f'活性（1）：{y.sum()} 个')
@@ -79,7 +105,7 @@ def main():
 
     # 6. 顺便保存描述符为 CSV（方便查看）
     df_desc = pd.DataFrame(X_desc, columns=desc_names)
-    df_desc.insert(0, 'smiles', valid_smiles_desc)
+    df_desc.insert(0, 'smiles', filtered_smiles)
     df_desc['label'] = y
     desc_csv_path = os.path.join(project_dir, 'data', 'descriptors.csv')
     df_desc.to_csv(desc_csv_path, index=False)
