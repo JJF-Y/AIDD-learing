@@ -118,10 +118,10 @@ def train_and_evaluate(X_train, X_test, y_train, y_test, model_type, feature_nam
     print(f'{"="*50}')
 
     # 训练
-    t0 = time.time()
+    t0 = time.time()    # 记开始时间
     model = get_model(model_type)
     model.fit(X_train, y_train)
-    train_time = time.time() - t0
+    train_time = time.time() - t0   # 算耗时
     print(f'训练耗时: {train_time:.2f}s')
 
     # 预测
