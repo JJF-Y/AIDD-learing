@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>COX-2 vs EGFR Molecular Descriptor Comparison</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;700&family=Instrument+Sans:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #101011;
+    --surface: #1a1a1a;
+    --border: #2a2a2a;
+    --text: #e8e8e8;
+    --text-muted: #888888;
+    --accent: #c9b896;
+    --accent-dim: #6b5d47;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Instrument Sans', sans-serif;
+    line-height: 1.7;
+    padding: 0;
+  }
+  .container { max-width: 900px; margin: 0 auto; padding: 48px 32px; }
+  h1 {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    margin-bottom: 8px;
+  }
+  h2 {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    margin: 40px 0 16px;
+    color: var(--accent);
+  }
+  h3 {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 600;
+    margin: 24px 0 8px;
+  }
+  .meta {
+    font-family: 'Geist Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    margin-bottom: 32px;
+  }
+  p { margin-bottom: 12px; font-size: 0.95rem; }
+  .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 32px; }
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 20px;
+  }
+  .stat-card .label {
+    font-family: 'Geist Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .stat-card .value {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--accent);
+    margin-top: 4px;
+  }
+  .stat-card .sub { font-size: 0.82rem; color: var(--text-muted); margin-top: 2px; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 16px 0 24px;
+    font-size: 0.85rem;
+  }
+  th {
+    text-align: left;
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border);
+    font-family: 'Geist Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 500;
+  }
+  td {
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.88rem;
+  }
+  td.num { font-family: 'Geist Mono', monospace; text-align: right; }
+  .sig { color: var(--accent); font-weight: 600; }
+  .ns { color: var(--text-muted); }
+  img { width: 100%; border-radius: 6px; border: 1px solid var(--border); margin: 8px 0 20px; }
+  .figure-caption {
+    font-family: 'Geist Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-top: -12px;
+    margin-bottom: 24px;
+  }
+  .finding {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 6px 6px 0;
+    padding: 16px 20px;
+    margin-bottom: 12px;
+  }
+  .finding .title {
+    font-family: 'Bricolage Grotesque', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .finding .body { font-size: 0.85rem; color: var(--text-muted); }
+  .trend-up { color: var(--accent); }
+  .trend-down { color: #7a7a7a; }
+  .trend-flat { color: var(--text-muted); }
+  .arrow { font-family: 'Geist Mono', monospace; font-size: 0.8rem; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>COX-2 vs EGFR Molecular Descriptor Comparison</h1>
+<div class="meta">EGFR n=2030 | COX-2 n=1720 | Mann-Whitney U test | 2026-10-10</div>
+
+<div class="stats-grid">
+  <div class="stat-card">
+    <div class="label">EGFR Sample Size</div>
+    <div class="value">2,030</div>
+    <div class="sub">51.9% active (1054:976)</div>
+  </div>
+  <div class="stat-card">
+    <div class="label">COX-2 Sample Size</div>
+    <div class="value">1,720</div>
+    <div class="sub">48.8% active (840:880)</div>
+  </div>
+  <div class="stat-card">
+    <div class="label">Significant Descriptors</div>
+    <div class="value">6 / 7</div>
+    <div class="sub">p < 0.05 (Mann-Whitney U)</div>
+  </div>
+  <div class="stat-card">
+    <div class="label">Largest Effect Size</div>
+    <div class="value">0.682</div>
+    <div class="sub">HBD (NumHDonors)</div>
+  </div>
+</div>
+
+<h2>1. Overall Distribution: Box Plots</h2>
+<p>Each box shows median (line), IQR (box), whiskers (1.5x IQR), and outliers (dots). EGFR inhibitors are consistently larger and more polar than COX-2 inhibitors.</p>
+<img src="boxplot_all.png" alt="Box plot: EGFR vs COX-2 all descriptors">
+<div class="figure-caption">Fig 1. Box plot comparison of 7 molecular descriptors between EGFR (n=2030) and COX-2 (n=1720) inhibitor datasets.</div>
+
+<h2>2. By Activity: Active vs Inactive</h2>
+<p>EGFR+ = EGFR active, EGFR- = EGFR inactive, COX2+ = COX-2 active, COX2- = COX-2 inactive. Trends (active vs inactive) differ between targets for HBA, Rotatable Bonds, and Fsp3.</p>
+<img src="boxplot_by_activity.png" alt="Box plot: descriptors by activity status">
+<div class="figure-caption">Fig 2. Descriptor distributions stratified by activity label (pChEMBL >= 6.5 threshold) within each target.</div>
+
+<h2>3. Statistical Summary</h2>
+<table>
+  <tr>
+    <th>Descriptor</th>
+    <th>EGFR mean ± std</th>
+    <th>COX-2 mean ± std</th>
+    <th>Diff</th>
+    <th>Effect size</th>
+    <th>p-value</th>
+    <th>Sig.</th>
+  </tr>
+  <tr>
+    <td>MolWt</td>
+    <td class="num">411.23 ± 103.44</td>
+    <td class="num">379.02 ± 59.92</td>
+    <td class="num">+32.22</td>
+    <td class="num">0.194</td>
+    <td class="num"><0.001</td>
+    <td class="sig">***</td>
+  </tr>
+  <tr>
+    <td>MolLogP</td>
+    <td class="num">4.11 ± 1.39</td>
+    <td class="num">4.03 ± 1.13</td>
+    <td class="num">+0.08</td>
+    <td class="num">0.035</td>
+    <td class="num">0.064</td>
+    <td class="ns">ns</td>
+  </tr>
+  <tr>
+    <td>NumHAcceptors</td>
+    <td class="num">5.72 ± 1.62</td>
+    <td class="num">3.91 ± 1.35</td>
+    <td class="num">+1.81</td>
+    <td class="num">0.619</td>
+    <td class="num"><0.001</td>
+    <td class="sig">***</td>
+  </tr>
+  <tr>
+    <td>NumHDonors</td>
+    <td class="num">2.07 ± 1.15</td>
+    <td class="num">0.74 ± 0.87</td>
+    <td class="num">+1.34</td>
+    <td class="num">0.682</td>
+    <td class="num"><0.001</td>
+    <td class="sig">***</td>
+  </tr>
+  <tr>
+    <td>TPSA</td>
+    <td class="num">84.90 ± 28.07</td>
+    <td class="num">67.47 ± 23.19</td>
+    <td class="num">+17.43</td>
+    <td class="num">0.382</td>
+    <td class="num"><0.001</td>
+    <td class="sig">***</td>
+  </tr>
+  <tr>
+    <td>NumRotatableBonds</td>
+    <td class="num">5.71 ± 2.90</td>
+    <td class="num">4.08 ± 1.79</td>
+    <td class="num">+1.63</td>
+    <td class="num">0.342</td>
+    <td class="num"><0.001</td>
+    <td class="sig">***</td>
+  </tr>
+  <tr>
+    <td>FractionCSP3</td>
+    <td class="num">0.18 ± 0.12</td>
+    <td class="num">0.18 ± 0.14</td>
+    <td class="num">-0.01</td>
+    <td class="num">0.040</td>
+    <td class="num">0.032</td>
+    <td class="sig">*</td>
+  </tr>
+</table>
+<p style="font-size:0.8rem;color:var(--text-muted)">Effect size = rank-biserial correlation (|r|). *** p<0.001, * p<0.05, ns = not significant. Mann-Whitney U two-sided test.</p>
+
+<h2>4. Activity Trend Comparison</h2>
+<p>Whether active molecules are higher (↑) or lower (↓) than inactive for each descriptor. This reveals <strong>which molecular properties track with bioactivity</strong> — and whether that tracking is consistent across targets.</p>
+<table>
+  <tr>
+    <th>Descriptor</th>
+    <th>EGFR active mean</th>
+    <th>EGFR inactive mean</th>
+    <th>EGFR trend</th>
+    <th>COX-2 active mean</th>
+    <th>COX-2 inactive mean</th>
+    <th>COX-2 trend</th>
+    <th>Consistent?</th>
+  </tr>
+  <tr>
+    <td>MolWt</td>
+    <td class="num">425.01</td><td class="num">396.39</td>
+    <td class="trend-up arrow">↑</td>
+    <td class="num">390.00</td><td class="num">368.53</td>
+    <td class="trend-up arrow">↑</td>
+    <td class="sig">Yes</td>
+  </tr>
+  <tr>
+    <td>MolLogP</td>
+    <td class="num">4.25</td><td class="num">3.95</td>
+    <td class="trend-up arrow">↑</td>
+    <td class="num">4.29</td><td class="num">3.79</td>
+    <td class="trend-up arrow">↑</td>
+    <td class="sig">Yes</td>
+  </tr>
+  <tr>
+    <td>NumHAcceptors</td>
+    <td class="num">5.96</td><td class="num">5.47</td>
+    <td class="trend-up arrow">↑</td>
+    <td class="num">3.72</td><td class="num">4.10</td>
+    <td class="trend-down arrow">↓</td>
+    <td class="ns"><strong>No</strong></td>
+  </tr>
+  <tr>
+    <td>NumHDonors</td>
+    <td class="num">1.94</td><td class="num">2.22</td>
+    <td class="trend-down arrow">↓</td>
+    <td class="num">0.62</td><td class="num">0.85</td>
+    <td class="trend-down arrow">↓</td>
+    <td class="sig">Yes</td>
+  </tr>
+  <tr>
+    <td>TPSA</td>
+    <td class="num">81.41</td><td class="num">88.65</td>
+    <td class="trend-down arrow">↓</td>
+    <td class="num">64.53</td><td class="num">70.28</td>
+    <td class="trend-down arrow">↓</td>
+    <td class="sig">Yes</td>
+  </tr>
+  <tr>
+    <td>NumRotatableBonds</td>
+    <td class="num">6.06</td><td class="num">5.34</td>
+    <td class="trend-up arrow">↑</td>
+    <td class="num">4.01</td><td class="num">4.15</td>
+    <td class="trend-down arrow">↓</td>
+    <td class="ns"><strong>No</strong></td>
+  </tr>
+  <tr>
+    <td>FractionCSP3</td>
+    <td class="num">0.18</td><td class="num">0.17</td>
+    <td class="trend-up arrow">↑</td>
+    <td class="num">0.17</td><td class="num">0.20</td>
+    <td class="trend-down arrow">↓</td>
+    <td class="ns"><strong>No</strong></td>
+  </tr>
+</table>
+
+<h2>5. Key Findings</h2>
+
+<div class="finding">
+  <div class="title">HBD is the largest inter-target difference (effect size 0.682)</div>
+  <div class="body">EGFR inhibitors average 2.07 H-bond donors vs COX-2's 0.74. This reflects a fundamental binding-mode difference: EGFR inhibitors require hinge-region H-bond donors (e.g., quinazoline NH), while COX-2 inhibitors rely primarily on hydrophobic and van der Waals contacts. Fewer donors also means better membrane permeability — consistent with COX-2 being an extracellular enzyme (no need to cross cell membrane).</div>
+</div>
+
+<div class="finding">
+  <div class="title">HBA activity trend is reversed between targets</div>
+  <div class="body">EGFR: active > inactive (5.96 > 5.47) — more acceptors = better hinge binding. COX-2: active < inactive (3.72 < 4.10) — fewer acceptors = less desolvation penalty in the hydrophobic COX-2 side pocket. This reversal directly mirrors the different binding pocket chemistry: EGFR's hinge is polar (needs H-bonds), COX-2's side pocket is hydrophobic (penalizes polarity).</div>
+</div>
+
+<div class="finding">
+  <div class="title">LogP is the only non-significant inter-target difference</div>
+  <div class="body">Both targets cluster around LogP ≈ 4.0-4.1 (p=0.064, ns). This is a shared pharmacological property: both require sufficient lipophilicity for membrane access / hydrophobic pocket engagement. LogP ~4 is a common "sweet spot" for oral bioavailability in drug-like molecules regardless of target.</div>
+</div>
+
+<div class="finding">
+  <div class="title">EGFR inhibitors are larger and more flexible</div>
+  <div class="body">MolWt (411 vs 379, p<0.001), Rotatable Bonds (5.7 vs 4.1, p<0.001), and TPSA (85 vs 67, p<0.001) are all significantly higher for EGFR. The ATP-binding pocket of kinases is large and elongated, requiring bigger, more flexible molecules to span from the hinge region to the DFG motif / solvent front. COX-2's active site is more compact.</div>
+</div>
+
+<div class="finding">
+  <div class="title">Active molecules are consistently larger and more lipophilic — across both targets</div>
+  <div class="body">MolWt (↑ in both) and LogP (↑ in both) show that "bigger and more hydrophobic = more likely active" is a universal trend in these target families, regardless of binding mechanism. This aligns with the general principle that stronger binding often requires larger contact surfaces and hydrophobic complementarity.</div>
+</div>
+
+<div class="finding">
+  <div class="title">Rotatable Bonds and Fsp3 show opposite activity trends</div>
+  <div class="body">EGFR: active molecules are MORE flexible (6.06 > 5.34) — need conformational adaptability for the elongated kinase pocket. COX-2: active molecules are LESS flexible (4.01 < 4.15) — rigidity reduces entropic penalty in the compact COX-2 pocket. This is a direct trade-off between binding adaptability and pre-organization, and the optimal strategy depends on pocket geometry.</div>
+</div>
+
+</div>
+</body>
+</html>
