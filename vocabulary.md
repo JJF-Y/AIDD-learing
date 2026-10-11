@@ -106,6 +106,18 @@
 | bit | 位 | 二进制位（0或1） |
 | hashing | 哈希 | 把任意数据映射到固定范围 |
 
+## 论文阅读 · QSAR
+
+| 英文 | 中文 | 说明 |
+|---|---|---|
+| independent variable | 自变量 | 模型输入 X（特征、描述符） |
+| dependent variable | 因变量 | 模型要预测的 y（也叫 target / label / response） |
+| QSAR (Quantitative Structure–Activity Relationship) | 定量构效关系 | 用数学模型把分子结构定量映射到生物活性 |
+| similarity hypothesis | 相似性假设 | 结构相似则活性相似——QSAR 成立的前提 |
+| activity cliff | 活性悬崖 | 结构微改但活性剧变的分子对，相似性假设的失效点 |
+| applicability domain (AD) | 适用域 | 模型只对训练数据覆盖的化学空间内的预测可信 |
+| virtual screening | 虚拟筛选 | 用计算模型给化合物库排序，挑少数进实验 |
+
 ## 工程
 
 | 英文 | 中文 | 说明 |
