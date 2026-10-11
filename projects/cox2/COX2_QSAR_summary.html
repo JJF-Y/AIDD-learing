@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>COX-2 QSAR 项目总结报告</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;700&family=Instrument+Sans:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#101011; --surface:#18181a; --surface2:#1f1f22; --border:#2a2a2e;
+    --text:#e8e6e1; --muted:#8a877f; --accent:#c9b896; --accent2:#8b7355;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--bg);color:var(--text);font-family:'Instrument Sans',sans-serif;line-height:1.75}
+  .wrap{max-width:920px;margin:0 auto;padding:56px 32px 80px}
+  h1{font-family:'Bricolage Grotesque',sans-serif;font-size:2.3rem;font-weight:700;letter-spacing:-.03em;margin-bottom:6px}
+  h2{font-family:'Bricolage Grotesque',sans-serif;font-size:1.35rem;font-weight:600;letter-spacing:-.02em;margin:48px 0 18px;padding-top:8px}
+  h2 .num{color:var(--accent);font-family:'Geist Mono',monospace;font-size:.85em;margin-right:10px}
+  h3{font-family:'Bricolage Grotesque',sans-serif;font-size:1.02rem;font-weight:600;margin:22px 0 8px;color:var(--accent)}
+  p{font-size:.94rem;margin-bottom:12px;color:#d4d1c9}
+  .meta{font-family:'Geist Mono',monospace;font-size:.76rem;color:var(--muted);margin-bottom:36px;letter-spacing:.02em}
+  .lead{font-size:1.02rem;color:var(--text);border-left:2px solid var(--accent);padding-left:18px;margin:24px 0}
+  .cards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:28px 0}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:18px 16px}
+  .card .k{font-family:'Geist Mono',monospace;font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+  .card .v{font-family:'Bricolage Grotesque',sans-serif;font-size:1.6rem;font-weight:700;color:var(--accent);margin-top:6px;line-height:1.1}
+  .card .s{font-size:.74rem;color:var(--muted);margin-top:4px}
+  table{width:100%;border-collapse:collapse;margin:14px 0 22px;font-size:.85rem}
+  th{text-align:left;padding:9px 10px;border-bottom:1px solid var(--border);font-family:'Geist Mono',monospace;font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;font-weight:500}
+  td{padding:8px 10px;border-bottom:1px solid #222226;font-size:.86rem}
+  td.n{font-family:'Geist Mono',monospace;text-align:right}
+  .hi{color:var(--accent);font-weight:600}
+  .mut{color:var(--muted)}
+  .up{color:var(--accent)} .down{color:#8a877f} .no{color:var(--muted);font-weight:600}
+  img{width:100%;border-radius:8px;border:1px solid var(--border);margin:10px 0 6px;background:#fff}
+  .figcap{font-family:'Geist Mono',monospace;font-size:.72rem;color:var(--muted);margin-bottom:24px}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .box{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:18px 20px;margin-bottom:14px}
+  .box .t{font-family:'Bricolage Grotesque',sans-serif;font-weight:600;font-size:.95rem;margin-bottom:6px}
+  .box .d{font-size:.84rem;color:var(--muted)}
+  .box.warn{border-left:3px solid var(--accent2)}
+  .smiles{font-family:'Geist Mono',monospace;font-size:.74rem;background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:7px 10px;display:block;margin:6px 0;word-break:break-all;color:#c9c6bd}
+  .tag{display:inline-block;font-family:'Geist Mono',monospace;font-size:.68rem;padding:2px 8px;border-radius:20px;border:1px solid var(--accent2);color:var(--accent);margin-right:6px}
+  .flow{font-family:'Geist Mono',monospace;font-size:.8rem;line-height:2.1;color:#c9c6bd}
+  .flow b{color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>COX-2 QSAR 项目总结报告</h1>
+<div class="meta">TARGET: CYCLOOXYGENASE-2 (PTGS2, CHEMBL230) · DATA: ChEMBL · 2026.10.11 · SECOND PRACTICE PROJECT</div>
+
+<p class="lead">第二个 QSAR 练手项目，全流程独立仿写完成。与 EGFR 项目最大的不同：<b>COX-2 抑制剂化学型多样（昔布类 / 洛芬类 / 水杨酸类），模型整体更难预测，骨架划分泛化能力显著下降</b>。错误分析揭示模型学到的是"昔布脸"这一化学型特征，而非真正的结合机制。</p>
+
+<div class="cards">
+  <div class="card"><div class="k">唯一分子</div><div class="v">1,720</div><div class="s">5000 条原始记录清洗而来</div></div>
+  <div class="card"><div class="k">正负比例</div><div class="v">48.8%</div><div class="s">840 活性 : 880 非活性</div></div>
+  <div class="card"><div class="k">随机划分最佳 F1</div><div class="v">0.792</div><div class="s">XGB + 描述符+指纹 · AUC 0.851</div></div>
+  <div class="card"><div class="k">骨架划分最佳 F1</div><div class="v">0.760</div><div class="s">RF + 描述符 · AUC 0.720</div></div>
+</div>
+
+<h2><span class="num">01</span>项目流程与数据轨迹</h2>
+<table>
+  <tr><th>步骤</th><th>处理</th><th class="n">数量变化</th><th>说明</th></tr>
+  <tr><td>01 拉取</td><td>ChEMBL API 分页拉取（CHEMBL230）</td><td class="n">5,000 条</td><td>IC50 3175 · Inhibition 1625</td></tr>
+  <tr><td>02 清洗</td><td>去空 pChEMBL（Inhibition 多无定量值）</td><td class="n">→ 2,662</td><td>流失 47%，高于 EGFR 的 37%</td></tr>
+  <tr><td></td><td>SMILES 标准化 + 去重取均值</td><td class="n">→ 1,721</td><td>阈值 pChEMBL ≥ 6.5</td></tr>
+  <tr><td>03 特征</td><td>异常值过滤（MW &gt; 1000）</td><td class="n">→ 1,720</td><td>仅剔除 1 个异常分子</td></tr>
+  <tr><td>04 建模</td><td>3 特征 × 2 划分 × 3 模型 = 18 组合</td><td class="n">1376 训 / 344 测</td><td>骨架 413 种</td></tr>
+  <tr><td>05 分析</td><td>12 张图表 + 错误样本分析</td><td class="n">FP 47 / FN 31</td><td>RF + 指纹（随机划分）</td></tr>
+</table>
+<p class="mut" style="font-size:.82rem">注意 COX-2 在"去空 pChEMBL"一步流失比 EGFR 多 10 个百分点，原因正是数据中 Inhibition 类（单浓度抑制率，无 IC50）占比高达 32.5%（EGFR 仅 10.5%）——<b>实验测定方式的差异直接决定了可建模数据量</b>。</p>
+
+<h2><span class="num">02</span>模型结果</h2>
+
+<h3>随机划分 Top 5</h3>
+<table>
+  <tr><th>模型</th><th>特征</th><th class="n">Accuracy</th><th class="n">F1</th><th class="n">AUC</th><th class="n">过拟合</th></tr>
+  <tr><td class="hi">XGB</td><td class="hi">描述符+指纹</td><td class="n hi">0.788</td><td class="n hi">0.792</td><td class="n">0.851</td><td class="n">0.171</td></tr>
+  <tr><td>RF</td><td>描述符+指纹</td><td class="n">0.785</td><td class="n">0.789</td><td class="n">0.859</td><td class="n">0.205</td></tr>
+  <tr><td>SVM</td><td>指纹</td><td class="n">0.782</td><td class="n">0.785</td><td class="n hi">0.857</td><td class="n">0.106</td></tr>
+  <tr><td>RF</td><td>指纹</td><td class="n">0.773</td><td class="n">0.778</td><td class="n">0.844</td><td class="n">0.217</td></tr>
+  <tr><td>XGB</td><td>指纹</td><td class="n">0.747</td><td class="n">0.751</td><td class="n">0.840</td><td class="n">0.174</td></tr>
+</table>
+
+<h3>骨架划分 Top 5（更接近真实泛化场景）</h3>
+<table>
+  <tr><th>模型</th><th>特征</th><th class="n">Accuracy</th><th class="n">F1</th><th class="n">AUC</th><th class="n">过拟合</th></tr>
+  <tr><td class="hi">RF</td><td class="hi">描述符(7维)</td><td class="n">0.692</td><td class="n hi">0.760</td><td class="n hi">0.720</td><td class="n">0.275</td></tr>
+  <tr><td>XGB</td><td>描述符(7维)</td><td class="n">0.669</td><td class="n">0.744</td><td class="n">0.717</td><td class="n">0.280</td></tr>
+  <tr><td>SVM</td><td>描述符(7维)</td><td class="n">0.645</td><td class="n">0.742</td><td class="n">0.684</td><td class="n">-0.024</td></tr>
+  <tr><td>SVM</td><td>描述符+指纹</td><td class="n">0.640</td><td class="n">0.732</td><td class="n">0.684</td><td class="n">-0.016</td></tr>
+  <tr><td>RF</td><td>描述符+指纹</td><td class="n">0.686</td><td class="n">0.730</td><td class="n">0.746</td><td class="n">0.306</td></tr>
+</table>
+<div class="box warn">
+  <div class="t">⚠ 骨架划分 F1 的"虚高"陷阱</div>
+  <div class="d">描述符模型骨架划分 F1 看似比随机划分还高（0.760 vs 0.703），但这不是模型变强了——骨架划分后测试集活性分子占比偏高（199 活性 / 145 非活性 ≈ 57.8%），模型偏向预测"活性"，召回率高达 0.844 而精确率仅 0.691。<b>判断排序能力应看 AUC（0.720），而不是受类别比例影响的 F1</b>。</div>
+</div>
+
+<div class="grid2">
+  <div><img src="figures/roc_comparison.png" alt="ROC"><div class="figcap">FIG 1 · ROC 曲线对比（随机划分）</div></div>
+  <div><img src="figures/cm_rf_fingerprint.png" alt="CM fingerprint"><div class="figcap">FIG 2 · RF+指纹 混淆矩阵（召回率 81.5%）</div></div>
+</div>
+<img src="figures/cm_rf_descriptors.png" alt="CM descriptors" style="max-width:520px;display:block;margin:10px auto 6px">
+<div class="figcap" style="text-align:center">FIG 3 · RF+描述符 混淆矩阵（召回率 72.6%，与指纹差距远小于 EGFR）</div>
+
+<h2><span class="num">03</span>COX-2 vs EGFR 跨靶点对比</h2>
+
+<h3>3.1 描述符总体分布（Mann-Whitney U 检验）</h3>
+<table>
+  <tr><th>描述符</th><th class="n">EGFR (n=2030)</th><th class="n">COX-2 (n=1720)</th><th class="n">效应量 |r|</th><th class="n">p 值</th></tr>
+  <tr><td>MW</td><td class="n">411.23 ± 103.4</td><td class="n">379.02 ± 59.9</td><td class="n">0.194</td><td class="n hi">&lt;0.001 ***</td></tr>
+  <tr><td>LogP</td><td class="n">4.11 ± 1.39</td><td class="n">4.03 ± 1.13</td><td class="n">0.035</td><td class="n mut">0.064 ns</td></tr>
+  <tr><td>HBA</td><td class="n">5.72 ± 1.62</td><td class="n">3.91 ± 1.35</td><td class="n">0.619</td><td class="n hi">&lt;0.001 ***</td></tr>
+  <tr><td>HBD</td><td class="n">2.07 ± 1.15</td><td class="n">0.74 ± 0.87</td><td class="n hi">0.682</td><td class="n hi">&lt;0.001 ***</td></tr>
+  <tr><td>TPSA</td><td class="n">84.90 ± 28.1</td><td class="n">67.47 ± 23.2</td><td class="n">0.382</td><td class="n hi">&lt;0.001 ***</td></tr>
+  <tr><td>RotBonds</td><td class="n">5.71 ± 2.90</td><td class="n">4.08 ± 1.79</td><td class="n">0.342</td><td class="n hi">&lt;0.001 ***</td></tr>
+  <tr><td>Fsp3</td><td class="n">0.18 ± 0.12</td><td class="n">0.18 ± 0.14</td><td class="n">0.040</td><td class="n">0.032 *</td></tr>
+</table>
+<p class="mut" style="font-size:.82rem"><b>解读：</b>HBD 差异最大（效应量 0.682）——EGFR 抑制剂需要 hinge 区氢键给体（喹唑啉 NH），COX-2 抑制剂主要靠疏水作用，平均不到 1 个给体。LogP 是唯一无显著差异的指标：两类靶点共享 LogP ≈ 4 的"类药甜区"。</p>
+
+<h3>3.2 活性 vs 非活性趋势是否一致</h3>
+<table>
+  <tr><th>描述符</th><th>EGFR 趋势</th><th>COX-2 趋势</th><th>一致？</th><th>含义</th></tr>
+  <tr><td>MW</td><td class="up">↑ 425 / 396</td><td class="up">↑ 390 / 369</td><td class="hi">✓</td><td>共性：活性分子更大</td></tr>
+  <tr><td>LogP</td><td class="up">↑ 4.25 / 3.95</td><td class="up">↑ 4.29 / 3.79</td><td class="hi">✓</td><td>共性：活性分子更疏水（COX-2 分离更明显）</td></tr>
+  <tr><td>HBA</td><td class="up">↑ 5.96 / 5.47</td><td class="down">↓ 3.72 / 4.10</td><td class="no">✗ 相反</td><td>EGFR 需受体结合 hinge；COX-2 疏水口袋惩罚极性</td></tr>
+  <tr><td>HBD</td><td class="down">↓ 1.94 / 2.22</td><td class="down">↓ 0.62 / 0.85</td><td class="hi">✓</td><td>共性：给体少 = 透膜/去溶剂化更有利</td></tr>
+  <tr><td>TPSA</td><td class="down">↓ 81 / 89</td><td class="down">↓ 65 / 70</td><td class="hi">✓</td><td>共性：活性分子极性更低</td></tr>
+  <tr><td>RotBonds</td><td class="up">↑ 6.06 / 5.34</td><td class="down">↓ 4.01 / 4.15</td><td class="no">✗ 相反</td><td>激酶长口袋需柔性；COX-2 紧凑口袋重预组织</td></tr>
+  <tr><td>Fsp3</td><td class="mut">— 0.18 / 0.17</td><td class="mut">— 0.17 / 0.20</td><td class="no">✗</td><td>两靶点内部均无区分力</td></tr>
+</table>
+
+<h3>3.3 模型表现对比（同一套代码、同参数）</h3>
+<table>
+  <tr><th>指标</th><th class="n">EGFR</th><th class="n">COX-2</th><th class="n">差距</th></tr>
+  <tr><td>随机划分最佳 AUC</td><td class="n">0.923 (SVM+指纹)</td><td class="n">0.857 (SVM+指纹)</td><td class="n">−0.066</td></tr>
+  <tr><td>骨架划分 AUC（同模型）</td><td class="n">0.838</td><td class="n">0.657</td><td class="n hi">−0.181</td></tr>
+  <tr><td>RF+指纹 召回率</td><td class="n">0.910</td><td class="n">0.815</td><td class="n">−0.095</td></tr>
+  <tr><td>骨架划分过拟合（RF+指纹）</td><td class="n">0.159</td><td class="n">0.367</td><td class="n">+0.208</td></tr>
+</table>
+<div class="box">
+  <div class="t">核心结论</div>
+  <div class="d">随机划分只差 0.07，但<b>骨架划分差 0.18</b>——COX-2 模型在新骨架上的泛化能力远比 EGFR 差。原因：EGFR 抑制剂骨架集中（喹唑啉家族，指纹模式可迁移）；COX-2 抑制剂多化学型并存，指纹里的子结构模式跨骨架不通用。这也解释了为什么 COX-2 骨架划分下<b>简单描述符（AUC 0.720）反而战胜指纹（AUC 0.649）</b>：整体理化性质比特定子结构更可迁移。</div>
+</div>
+
+<h2><span class="num">04</span>药学核心发现：模型学的是"昔布脸"，不是结合机制</h2>
+
+<div class="grid2">
+  <div class="box">
+    <div class="t">假阳性 FP（47 个）——"长得像昔布但无效"</div>
+    <div class="d">
+      描述符画像：MW <b>391.7</b>（偏大）、HBD <b>0.49</b>（很少）、Fsp3 0.16（很平面）<br><br>
+      结构共性：<span class="tag">二芳基杂环</span><span class="tag">磺酰胺/甲砜</span><span class="tag">氟苯</span>
+      <span class="smiles">N#Cc1cc(-c2ccc(F)cc2)n(-c2ccc(S(N)(=O)=O)cc2)n1</span>
+      <span class="smiles">CS(=O)(=O)c1ccc(-c2sc(CCCc3ccccc3)nc2-c2ccc(F)cc2)cc1</span>
+      这正是塞来昔布 / 罗非昔布的经典化学型。模型规则近似：<b>"二芳基杂环 + 砜基 → 活性"</b>，并把它过度推广。
+    </div>
+  </div>
+  <div class="box">
+    <div class="t">假阴性 FN（31 个）——"有效但不长昔布脸"</div>
+    <div class="d">
+      描述符画像：MW <b>369.9</b>（偏小）、HBD 0.74、Fsp3 <b>0.21</b>（更立体）<br><br>
+      结构共性：<span class="tag">羧酸 (profen 类)</span><span class="tag">sp3 碳多</span><span class="tag">无砜基</span>
+      <span class="smiles">C=CCc1cccc(-c2ccc(C(C)C(=O)O)cc2)c1</span>
+      <span class="smiles">C#CCCCC(=O)c1cc(C(C)(C)C)c(O)c(C(C)(C)C)c1</span>
+      这是氟比洛芬等<b>酸性 NSAIDs</b> 的化学型——跟昔布类完全不同，训练数据中信号弱，被系统性漏掉。
+    </div>
+  </div>
+</div>
+
+<div class="box warn">
+  <div class="t">深层教训：模型没有学会"为什么有效"</div>
+  <div class="d">
+    真实药理学中，昔布类的 SO₂Me/SO₂NH₂ 之所以重要，是因为它能进入 COX-2 独有的<b>侧面口袋（side pocket）</b>——COX-2 用较小的 Val523 替代了 COX-1 的 Ile523，腾出空间容纳这个基团；而且基团必须处于<b>正确的空间位置</b>。<br><br>
+    模型只看到"分子里有砜基 + 两个芳环"这种 2D 表面特征，不知道空间取向，也不知道结合机制。结果：位置不对的砜基分子被误判为活性（FP），靠羧酸以另一套机制结合的 profen 类被漏掉（FN）。<br><br>
+    <b>方法论启示：QSAR 模型学到的是训练集活性分子的"长相分布"（chemotype correlation），不是因果机制。</b>化学型越多样的靶点，这个问题越致命——这正是 COX-2 比 EGFR 难预测的根本原因。
+  </div>
+</div>
+
+<h2><span class="num">05</span>特征重要性</h2>
+<div class="grid2">
+  <div><img src="figures/feature_importance_desc.png" alt="desc importance"><div class="figcap">FIG 4 · 描述符重要性：LogP &gt; MW &gt; TPSA</div></div>
+  <div><img src="figures/feature_importance_fp.png" alt="fp importance"><div class="figcap">FIG 5 · 指纹 Top20：首位仅 0.014（EGFR 为 0.026）</div></div>
+</div>
+<div class="box">
+  <div class="t">一个反直觉的方法论要点</div>
+  <div class="d">
+    HBD 是<b>两靶点之间</b>差异最大的描述符（效应量 0.682），却是 <b>COX-2 数据集内部</b>最没用的特征（重要性垫底）。<br>
+    因为 COX-2 分子的 HBD 普遍接近 0，活性/非活性之间几乎无差异（0.62 vs 0.85）。<br><br>
+    <b>结论：一个特征在组间的区分力 ≠ 在组内的区分力。</b>不能只看"活性/非活性均值差"或"靶点间均值差"就断定它对建模有用——必须看它在当前分类任务内部的分布重叠程度。
+  </div>
+</div>
+
+<h2><span class="num">06</span>局限与下一步</h2>
+<table>
+  <tr><th style="width:30%">局限</th><th>改进方向</th></tr>
+  <tr><td>骨架划分 AUC 仅 0.65–0.72，新骨架泛化弱</td><td>增加数据量；按化学型分层采样，保证各 chemotype 均衡入训</td></tr>
+  <tr><td>2D 指纹无法表达砜基的空间取向</td><td>引入 3D 描述符 / 构象依赖指纹（药效团模型）</td></tr>
+  <tr><td>模型偏向"昔布脸"，漏判酸性 NSAIDs</td><td>按化学型分别建模（local models）或加入 chemotype 感知特征</td></tr>
+  <tr><td>单一阈值 6.5、单一随机种子</td><td>阈值敏感性分析；多种子重复实验报告均值±标准差</td></tr>
+  <tr><td>未做 COX-2/COX-1 选择性建模</td><td>真正的昔布类核心是<b>选择性</b>，可构建双靶点选择性分类器</td></tr>
+</table>
+
+<h2><span class="num">07</span>英文术语速记</h2>
+<table>
+  <tr><th style="width:32%">English</th><th>中文 / 说明</th></tr>
+  <tr><td>Cyclooxygenase (COX-1/2)</td><td>环氧合酶；COX-2 为诱导型，炎症时上调</td></tr>
+  <tr><td>Prostaglandin</td><td>前列腺素；COX 的下游产物，介导炎症疼痛</td></tr>
+  <tr><td>NSAID</td><td>非甾体抗炎药（Non-Steroidal Anti-Inflammatory Drug）</td></tr>
+  <tr><td>coxib (selective COX-2 inhibitor)</td><td>昔布类选择性 COX-2 抑制剂（celecoxib, rofecoxib）</td></tr>
+  <tr><td>profen / 2-arylpropionic acid</td><td>洛芬类（布洛芬、氟比洛芬），含羧酸的酸性 NSAIDs</td></tr>
+  <tr><td>sulfonamide / methyl sulfone</td><td>磺酰胺 SO₂NH₂ / 甲砜 SO₂CH₃；进入 COX-2 side pocket 的关键基团</td></tr>
+  <tr><td>side pocket (Val523 vs Ile523)</td><td>COX-2 选择性的结构基础：Val 比 Ile 小，腾出侧袋</td></tr>
+  <tr><td>chemotype / scaffold</td><td>化学型 / 骨架；区别于 mechanism（机制）</td></tr>
+  <tr><td>Mann-Whitney U test</td><td>曼-惠特尼 U 检验；两独立样本非参数比较</td></tr>
+  <tr><td>effect size (rank-biserial r)</td><td>效应量；衡量差异大小，与 p 值互补（p 只表显著性）</td></tr>
+  <tr><td>false positive / false negative</td><td>假阳性（误报）/ 假阴性（漏报）</td></tr>
+  <tr><td>conformational pre-organization</td><td>构象预组织；刚性分子结合时熵损失小</td></tr>
+  <tr><td>desolvation penalty</td><td>去溶剂化代价；极性基团进入疏水口袋要付出能量</td></tr>
+</table>
+
+<p class="meta" style="margin-top:48px">— END · 第二个 QSAR 项目完成 · EGFR → COX-2 的跨靶点对比是本项目最大收获 —</p>
+
+</div>
+</body>
+</html>
