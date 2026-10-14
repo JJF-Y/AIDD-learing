@@ -117,6 +117,21 @@
 | activity cliff | 活性悬崖 | 结构微改但活性剧变的分子对，相似性假设的失效点 |
 | applicability domain (AD) | 适用域 | 模型只对训练数据覆盖的化学空间内的预测可信 |
 | virtual screening | 虚拟筛选 | 用计算模型给化合物库排序，挑少数进实验 |
+| parameter | 参数 | 模型要学的权重 w（未知）；区别于 feature（特征，已知输入） |
+| bit string | 比特串 / 位串 | 一串 0/1，每位表示分子"有无某种子结构"；摩根指纹就是 2048 位比特串 |
+| scaffold | 骨架 | 分子去掉侧链后的核心结构 |
+| scaffold split | 骨架划分 | 按骨架分组划分数据，同族分子不跨训练/测试，考真泛化 |
+| random split | 随机划分 | 打乱后随机分训练/测试，同族泄漏，成绩偏乐观 |
+| multicollinearity | 多重共线性 | 特征之间高度相关、信息冗余，等于放大未知数 |
+| underdetermined | 欠定 | 未知数 > 方程数，解不唯一（高维回归的危险区） |
+| overdetermined | 超定 | 方程数 > 未知数，只能被迫用最小二乘拟合出趋势线 |
+| least squares | 最小二乘 | "总误差平方和最小"的拟合准则 |
+| data leakage | 数据泄露 | 测试信息混进训练，成绩虚高 |
+| validation set | 验证集 | 调超参数用的数据，与测试集分开 |
+| test set | 测试集 | 最终裁判，只用一次 |
+| ADMET | 吸收/分布/代谢/排泄/毒性 | 分子成药性的一整套性质 |
+| retrosynthesis | 逆合成 | 从目标分子反推合成路线 |
+| generative model | 生成模型 | 按需求生成新分子的模型 |
 
 ## 工程
 
